@@ -17,12 +17,16 @@ public class InfoCompanyModel implements Parcelable {
         type = in.readString();
         size = in.readString();
         avatar = in.readString();
+        if (in.readByte() == 0) {
+            approvalMode = null;
+        } else {
+            approvalMode = in.readLong();
+        }
         address = in.readString();
         province = in.readString();
         introduce = in.readString();
         namePresenter = in.readString();
         phoneNumberPresenter = in.readString();
-        approvalMode = NOT_APPROVAL;
     }
 
     @Override
@@ -31,6 +35,12 @@ public class InfoCompanyModel implements Parcelable {
         dest.writeString(type);
         dest.writeString(size);
         dest.writeString(avatar);
+        if (approvalMode == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(approvalMode);
+        }
         dest.writeString(address);
         dest.writeString(province);
         dest.writeString(introduce);

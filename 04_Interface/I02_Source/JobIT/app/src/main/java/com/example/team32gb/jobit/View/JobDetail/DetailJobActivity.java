@@ -34,6 +34,8 @@ import com.example.team32gb.jobit.Utility.Config;
 import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.CompanyDetail.CompanyDetailActivity;
 import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
+import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
+import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.PostJob.PostJobRecruitmentActivity;
 import com.example.team32gb.jobit.View.PostedJob.DetailPostedJobActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
@@ -76,6 +78,8 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
 
 
         btnApply.setOnClickListener(this);
+
+        myToolBar = findViewById(R.id.tbDetailCompany);
         myToolBar.setTitle("Chi tiết");
         setSupportActionBar(myToolBar);
 
@@ -129,20 +133,7 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
         idCompany = itemPostJob.getDataPostJob().getIdCompany();
         idJob = itemPostJob.getDataPostJob().getIdJob();
 
-        String avatarPath = Environment.getExternalStorageDirectory() + "/logo" + "/" + idCompany + ".jpg";
-        Log.e("kiemtraanh",avatarPath);
-        Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
-        if(bitmap != null && avatarPath != null && !avatarPath.isEmpty()) {
-            btnAvatar.setBackground(new BitmapDrawable(bitmap));
-        }
 
-        txtNameJob.setText(itemPostJob.getDataPostJob().getNameJob());
-        txtSalary.setText("Từ $" + itemPostJob.getDataPostJob().getMinSalary() + " đến $" + itemPostJob.getDataPostJob().getMaxSalary() + "/" + itemPostJob.getDataPostJob().getEach());
-        txtTypeJob.setText(itemPostJob.getDataPostJob().getTypeJob());
-        txtNumberOfCadidates.setText(itemPostJob.getDataPostJob().getNumberEmployer());
-        txtJobDescription.setText(itemPostJob.getDataPostJob().getDescription());
-        txtJobRequierment.setText(itemPostJob.getDataPostJob().getQualification());
-        txtTime.setText(Util.getSubTime(itemPostJob.getDataPostJob().getTime()));
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +158,12 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        showInfo();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.listjob_actionbar, menu);
@@ -175,6 +172,19 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.tbHome:
+                if(typeUser == Config.IS_JOB_SEEKER) {
+                    Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
+                } else {
+                    Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+                }
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -248,5 +258,21 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
 
+    }
+
+    private void showInfo() {
+        String avatarPath = Environment.getExternalStorageDirectory() + "/logo" + "/" + idCompany + ".jpg";
+        Log.e("kiemtraanh",avatarPath);
+        Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+        if(bitmap != null && avatarPath != null && !avatarPath.isEmpty()) {
+            btnAvatar.setBackground(new BitmapDrawable(bitmap));
+        }
+        txtNameJob.setText(itemPostJob.getDataPostJob().getNameJob());
+        txtSalary.setText("Từ $" + itemPostJob.getDataPostJob().getMinSalary() + " đến $" + itemPostJob.getDataPostJob().getMaxSalary() + "/" + itemPostJob.getDataPostJob().getEach());
+        txtTypeJob.setText(itemPostJob.getDataPostJob().getTypeJob());
+        txtNumberOfCadidates.setText(itemPostJob.getDataPostJob().getNumberEmployer());
+        txtJobDescription.setText(itemPostJob.getDataPostJob().getDescription());
+        txtJobRequierment.setText(itemPostJob.getDataPostJob().getQualification());
+        txtTime.setText(Util.getSubTime(itemPostJob.getDataPostJob().getTime()));
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.DataApplied;
 import com.example.team32gb.jobit.R;
@@ -63,6 +64,12 @@ public class ViewAdapterInterview extends RecyclerView.Adapter<ViewAdapterInterv
                 drMoiLam.setValue(time);
                 DatabaseReference drMoiLamNTV = nodeRoot.child("moiLamNTVs").child(idJobSeeker).child(idCompany).child(idJob).child("timeApplied");
                 drMoiLamNTV.setValue(time);
+
+                mData.remove(i);
+                notifyItemRemoved(i);
+                notifyItemRangeChanged(i, getItemCount());
+
+                Toast.makeText(context, "Duyệt thành công", Toast.LENGTH_SHORT).show();
             }
         });
         myViewHolder.btnWacthCV.setOnClickListener(new View.OnClickListener() {

@@ -9,11 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.team32gb.jobit.Model.PostJob.ItemPostJob;
 import com.example.team32gb.jobit.Presenter.SavedJob.PresenterSavedJob;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
+import com.example.team32gb.jobit.Utility.Util;
+import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.example.team32gb.jobit.View.WaitingForInterview.ListJobInterviewViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,7 +33,7 @@ public class SavedJobActivity extends AppCompatActivity implements ViewListSaved
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_job);
-        myToolBar = findViewById(R.id.tbListInterview);
+
         recyclerView = this.findViewById(R.id.rvListInterview);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -39,6 +44,7 @@ public class SavedJobActivity extends AppCompatActivity implements ViewListSaved
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        myToolBar = findViewById(R.id.tbListInterview);
         myToolBar.setTitle("Đã lưu");
         setSupportActionBar(myToolBar);
 
@@ -49,6 +55,28 @@ public class SavedJobActivity extends AppCompatActivity implements ViewListSaved
         presenter.onCreate();
         presenter.getListJob(FirebaseAuth.getInstance().getUid());
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.listjob_actionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                Log.e("kiemtraback","ok");
+               onBackPressed();
+               break;
+            case R.id.tbHome:
+                Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

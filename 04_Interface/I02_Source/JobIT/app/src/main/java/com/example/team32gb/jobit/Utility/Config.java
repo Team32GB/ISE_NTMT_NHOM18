@@ -46,4 +46,5 @@ public class Config {
     public static final String ID_ACCUSED_KEY = "idaccused";
     public static final String ID_COMPANY_KEY ="idcompany";
 
+    public static long MILISECONDOFDAY = 86400000;
 }

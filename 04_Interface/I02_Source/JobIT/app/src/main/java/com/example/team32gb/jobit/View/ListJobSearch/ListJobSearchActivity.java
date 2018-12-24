@@ -92,6 +92,8 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
 
     @Override
     public void showListJob(List<ItemPostJob> itemPostJobs) {
+        Log.e("kiemtraAlgolia", "Ok");
+        Log.e("kiemtraalgolia",itemPostJobs.size() + " : " + itemPostJobs.get(0).getDataPostJob().getNameJob());
         ListJobViewAdapter adapter = new ListJobViewAdapter(this,itemPostJobs);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down);

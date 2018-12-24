@@ -12,8 +12,6 @@ public class AdminReportAdapterFragment extends FragmentPagerAdapter {
     final static int NUMBER_TAB =2;
     Context context;
 
-
-
     public AdminReportAdapterFragment(AdminReportActivity adminReportActivity, FragmentManager fm) {
         super(fm);
         context= adminReportActivity.getApplicationContext();

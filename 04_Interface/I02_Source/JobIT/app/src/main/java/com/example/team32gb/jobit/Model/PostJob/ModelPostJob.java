@@ -25,7 +25,6 @@ public class ModelPostJob {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dataPostJob.setNameCompany(dataSnapshot.child("name").getValue(String.class));
                 dataPostJob.setProvince(dataSnapshot.child("province").getValue(String.class));
-                dataPostJob.setAvatar(dataSnapshot.child("avatar").getValue(String.class));
                 dataPostJob.setIdCompany(Uid);
                 dataPostJob.setIdJob(idJob);
                 databaseReference.child(dataPostJob.getIdCompany()).child(idJob).setValue(dataPostJob);
@@ -45,7 +44,6 @@ public class ModelPostJob {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dataPostJob.setNameCompany(dataSnapshot.child("name").getValue(String.class));
                 dataPostJob.setProvince(dataSnapshot.child("province").getValue(String.class));
-                dataPostJob.setAvatar(dataSnapshot.child("avatar").getValue(String.class));
                 dataPostJob.setIdCompany(uid);
                 dataPostJob.setIdJob(idJob);
                 databaseReference.child(uid).child(idJob).setValue(dataPostJob);

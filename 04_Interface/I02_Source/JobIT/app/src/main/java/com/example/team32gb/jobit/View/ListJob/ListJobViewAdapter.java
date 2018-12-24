@@ -58,7 +58,7 @@ public class ListJobViewAdapter extends RecyclerView.Adapter<ListJobViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
-        Log.e("kiemtra111",mdata.get(i).getDataPostJob().getNameJob() + ": " + i);
+//        Log.e("kiemtra111",mdata.get(i).getDataPostJob().getNameJob() + ": " + i);
         final String idCompany = mdata.get(i).getDataPostJob().getIdCompany();
         final String idJob = mdata.get(i).getDataPostJob().getIdJob();
 
@@ -90,6 +90,8 @@ public class ListJobViewAdapter extends RecyclerView.Adapter<ListJobViewAdapter.
 
                 }
             });
+        } else {
+            myViewHolder.cbSaved.setEnabled(false);
         }
 
         if(idCompany != null) {

@@ -43,9 +43,10 @@ public class Util {
             dataPostJob.setQualification(jsonObject.getString("qualification"));
             dataPostJob.setTypeJob(jsonObject.getString("typeJob"));
             dataPostJob.setIdCompany(jsonObject.getString("idCompany"));
+            Log.e("kiemtraAlgolia",dataPostJob.getIdCompany());
             dataPostJob.setIdJob(jsonObject.getString("idJob"));
             dataPostJob.setNameCompany(jsonObject.getString("nameCompany"));
-            dataPostJob.setAvatar(jsonObject.getString("avatar"));
+          //  dataPostJob.setAvatar(jsonObject.getString("avatar"));
             dataPostJob.setProvince(jsonObject.getString("province"));
 
             itemPostJob.setDataPostJob(dataPostJob);
@@ -86,7 +87,9 @@ public class Util {
             long time = date.getTime();
             long currentTime = (new Date()).getTime();
             long difference = currentTime - time;
-            int subDay = (int) difference / (1000 * 60 * 60 * 24);
+            int subDay = (int) (difference / Config.MILISECONDOFDAY);
+            Log.e("kiemtratime",currentTime + " : " + time + " : " + difference);
+
 
             if (subDay > 0) {
                 return subDay + " ngày trước";
@@ -113,8 +116,7 @@ public class Util {
             long time = date.getTime();
             long currentTime = (new Date()).getTime();
             long difference = currentTime - time;
-            int subDay = (int) difference / (1000 * 60 * 60 * 24);
-
+            int subDay = (int) (difference / Config.MILISECONDOFDAY);
             if (subDay > 0) {
                 txtTime.setText(subDay + " ngày trước");
             } else {
@@ -153,7 +155,7 @@ public class Util {
 
     public static void saveImageToLocal(Bitmap bitmap, String uid) {
         String avatarPath = Environment.getExternalStorageDirectory() + "/avatar" + "/" + uid + ".jpg";
-        Log.e("kiemtraImage", avatarPath);
+//        Log.e("kiemtraImage", avatarPath);
         File file = new File(avatarPath);
         FileOutputStream fileOutputStream;
         try {
@@ -162,13 +164,13 @@ public class Util {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Log.e("kiemtraImage", avatarPath);
+//        Log.e("kiemtraImage", avatarPath);
 
     }
 
     public static void saveImageToFolderLogoLocal(Bitmap bitmap, String uid) {
         String avatarPath = Environment.getExternalStorageDirectory() + "/avatar" + "/" + uid + ".jpg";
-        Log.e("kiemtraImage", avatarPath);
+//        Log.e("kiemtraImage", avatarPath);
         File file = new File(avatarPath);
         FileOutputStream fileOutputStream;
         try {
@@ -177,13 +179,13 @@ public class Util {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Log.e("kiemtraImage", avatarPath);
+//        Log.e("kiemtraImage", avatarPath);
 
     }
 
     public static void loadImageFromLocal(AppCompatImageButton btnAvatar, String idCompany) {
         String avatarPath = Environment.getExternalStorageDirectory() + "/avatar" + "/" + idCompany + ".jpg";
-        Log.e("kiemtraanh", avatarPath);
+//        Log.e("kiemtraanh", avatarPath);
         Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
         if (bitmap != null && avatarPath != null && !avatarPath.isEmpty()) {
             btnAvatar.setBackground(new BitmapDrawable(bitmap));
@@ -192,7 +194,7 @@ public class Util {
 
     public static void loadImageFromFolderLogoLocal(AppCompatImageButton btnAvatar, String idCompany) {
         String avatarPath = Environment.getExternalStorageDirectory() + "/logo" + "/" + idCompany + ".jpg";
-        Log.e("kiemtraanh", avatarPath);
+//        Log.e("kiemtraanh", avatarPath);
         Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
         if (bitmap != null && avatarPath != null && !avatarPath.isEmpty()) {
             btnAvatar.setBackground(new BitmapDrawable(bitmap));

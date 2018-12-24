@@ -3,6 +3,9 @@ package com.example.team32gb.jobit;
 import android.content.Intent;
 import android.graphics.Color;
 import androidx.annotation.NonNull;
+
+import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
+import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -94,12 +97,21 @@ public class ListCandidateAcvitity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.detailjob_actionbar, menu);
+        menuInflater.inflate(R.menu.listjob_actionbar, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.tbHome:
+                Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
     public void setFragment(Fragment fragment){

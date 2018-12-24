@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+    android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +16,7 @@
                 android:isIndicator="false"
                 android:progressBackgroundTint="@color/colorPrimaryLight"
                 android:progressTint="@color/colorSecondary"
-                android:rating="2"
+                android:rating="0"
                 android:stepSize="0.1" />
 
             <TextView
@@ -33,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="3.5 stars"
+                android:text="0 stars"
                 android:textColor="#000"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -52,14 +44,16 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:text="Lương và lợi ích"
+                    android:layout_marginEnd="50dp"
                     android:textColor="#000"
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb1"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -69,7 +63,7 @@
                     android:isIndicator="false"
                     android:progressBackgroundTint="@color/colorPrimaryLight"
                     android:progressTint="@color/colorSecondary"
-                    android:rating="5"
+                    android:rating="0"
                     android:scaleX="1.5"
                     android:scaleY="1.5"
                     android:stepSize="0.1" />
@@ -78,9 +72,11 @@
                     android:id="@+id/tvStar1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="0dp"
                     android:layout_marginStart="8dp"
-                    android:text="5.0"
+                    android:text="0.0"
                     android:textColor="#000"
                     android:textSize="16sp" />
 
@@ -92,7 +88,7 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:text="Đào tạo và học tập"
@@ -100,6 +96,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb2"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,9 +105,9 @@
                     android:layout_toStartOf="@id/tvStar2"
                     android:progressBackgroundTint="@color/colorPrimaryLight"
                     android:progressTint="@color/colorSecondary"
-                    android:rating="5"
+                    android:rating="0"
                     android:scaleX="1.5"
-
+                    android:isIndicator="false"
                     android:scaleY="1.5"
                     android:stepSize="0.1" />
 
@@ -118,9 +115,11 @@
                     android:id="@+id/tvStar2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
-                    android:text="5.0"
+                    android:layout_marginTop="0dp"
+                    android:text="0.0"
                     android:textColor="#000"
                     android:textSize="16sp" />
 
@@ -132,7 +131,7 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:text="Văn hóa và vui chơi"
@@ -140,6 +139,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb3"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -149,7 +149,9 @@
                     android:layout_toStartOf="@id/tvStar3"
                     android:progressBackgroundTint="@color/colorPrimaryLight"
                     android:progressTint="@color/colorSecondary"
-                    android:rating="5"
+                    android:rating="0"
+                    android:isIndicator="false"
+
                     android:scaleX="1.5"
                     android:scaleY="1.5"
                     android:stepSize="0.1" />
@@ -160,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
-                    android:text="5.0"
+                    android:text="0.0"
                     android:textColor="#000"
                     android:textSize="16sp" />
 
@@ -173,7 +175,7 @@
                 android:layout_marginBottom="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:text="Không gian làm việc"
@@ -181,6 +183,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb4"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -190,8 +193,10 @@
                     android:layout_toStartOf="@id/tvStar4"
                     android:progressBackgroundTint="@color/colorPrimaryLight"
                     android:progressTint="@color/colorSecondary"
-                    android:rating="5"
+                    android:rating="0"
                     android:scaleX="1.5"
+                    android:isIndicator="false"
+
                     android:scaleY="1.5"
                     android:stepSize="0.1" />
 
@@ -201,41 +206,57 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
-                    android:text="5.0"
+                    android:layout_marginEnd="0dp"
+                    android:text="0.0"
                     android:textColor="#000"
                     android:textSize="16sp" />
 
             </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bình luận"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#000"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:minLines="4"
+                    android:maxLines="4"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-     android:layout_marginTop="4dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         >
-        <Button
-            android:id="@+id/btnAddReview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_gravity="center"
-            android:text="Thêm đánh giá" />
-    </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        >
-        <ListView
-            android:id="@+id/lstComment"
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-        </ListView>
-    </androidx.cardview.widget.CardView>
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="OK" />
 
-</LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Cacnel"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -31,9 +31,11 @@ import com.example.team32gb.jobit.Presenter.JobSeekerProfile.PresenterLogicJobSe
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
 import com.example.team32gb.jobit.Utility.Util;
+import com.example.team32gb.jobit.View.Admin.AdminHomeActivity;
 import com.example.team32gb.jobit.View.ChangePassword.ChangePasswordActivity;
 import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
 import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
+import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -307,6 +309,19 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+            case R.id.tbHome:
+                if(typeUser == Config.IS_JOB_SEEKER) {
+                    Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
+                } else if(typeUser == Config.IS_RECRUITER) {
+                    Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+                } else {
+                    Util.jumpActivityRemoveStack(this,AdminHomeActivity.class);
+                }
+        }
         return super.onOptionsItemSelected(item);
     }
 }

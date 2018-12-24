@@ -42,15 +42,14 @@ public class ModelListJobSearch {
     }
 
     public void getListJob(final String timKiem, String diaDiem) {
-        Client client = new Client("OYGFHT3AFC", "a45f57a7c6cc7e6b49db961f46d39ca5");
+        Client client = new Client("OYGFHT3AFC", "5d4c2ba1711e8b20d3754bc717222edc");
         final Index index = client.getIndex("tinTuyenDungs");
 
-        try {
             CompletionHandler completionHandler = new CompletionHandler() {
                 @Override
                 public void requestCompleted(JSONObject jsonObject, AlgoliaException e) {
                     if (jsonObject == null && e != null) {
-                        Log.e("kiemtraAlgolia", e.getMessage());
+                        Log.e("kiemtraAlgoliaError0", e.getMessage());
                     } else {
                         Log.e("kiemtraAlgolia", jsonObject.toString());
                         try {
@@ -62,6 +61,7 @@ public class ModelListJobSearch {
                                 Log.e("kiemtraAlgolia", object.getString("nameJob") + "");
                                 itemPostJobs.add(Util.parserJSONToItemPost(object));
                             }
+                           // Log.e("kiemtraAlgolia", itemPostJobs.get(0).getDataPostJob().getIdCompany());
                             eventBus.post(itemPostJobs);
                         } catch (JSONException e1) {
                             e1.printStackTrace();
@@ -70,44 +70,13 @@ public class ModelListJobSearch {
                     }
                 }
             };
-            JSONObject settings = new JSONObject().put("customRanking", "desc(maxSalary)");
-            index.setSettingsAsync(settings, completionHandler);
+            //JSONObject settings = new JSONObject().put("customRanking", "desc(maxSalary)");
+            //index.setSettingsAsync(settings, completionHandler);
             Query query = new Query(timKiem + " " + diaDiem)
                     .setAttributesToHighlight("nameJob")
                     .setHitsPerPage(20);
             index.searchAsync(query, completionHandler);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                DataSnapshot dsTin = dataSnapshot.child("tinTuyenDungs");
-//                for (DataSnapshot snapshot : dsTin.getChildren()) {
-//                    for (DataSnapshot snapshotChild : snapshot.getChildren()) {
-//                        DataPostJob dataPostJob = snapshotChild.getValue(DataPostJob.class);
-//                        ItemPostJob itemPostJob = new ItemPostJob();
-//                        itemPostJob.setDataPostJob(dataPostJob);
-//                        itemPostJob.setIdJob(snapshotChild.getKey());
-//                        itemPostJob.setIdCompany(snapshot.getKey());
-//                        Log.e("kiemtraname", snapshot.getKey());
-//                        String nameCompany = dataSnapshot.child("companys").child(itemPostJob.getIdCompany()).child("name").getValue(String.class);
-//
-//                        itemPostJob.setNameCompany(nameCompany);
-//
-//                        itemPostJobs.add(itemPostJob);
-//                    }
-//                }
-//                eventBus.post(itemPostJobs);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
 }

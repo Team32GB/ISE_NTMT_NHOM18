@@ -5,10 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.team32gb.jobit.InviteJobFragment;
+import com.example.team32gb.jobit.Utility.Util;
+import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.google.android.material.textfield.TextInputEditText;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -37,6 +46,8 @@ import static android.view.View.GONE;
 
 public class CreateCVActivity extends AppCompatActivity implements View.OnClickListener, ViewCreateCV {
     private static final String TAG = "kiemtraactivity";
+    private Toolbar myToolBar;
+    private ActionBar actionBar;
     Button btnAttachCV;
     Button btnSaveCV;
     Button BtnSelectDateOfBird;
@@ -147,6 +158,13 @@ public class CreateCVActivity extends AppCompatActivity implements View.OnClickL
         edtRole2 = findViewById(R.id.edtRole2);
         edtNumberMember2 = findViewById(R.id.edtNumberMember2);
 
+        myToolBar = findViewById(R.id.tb);
+        myToolBar.setTitle("Đã lưu");
+        setSupportActionBar(myToolBar);
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         btnRemoveProject2.setOnClickListener(this);
         btnEditPersonalInfor.setOnClickListener(this);
         btnEditCareerSkill.setOnClickListener(this);
@@ -205,6 +223,27 @@ public class CreateCVActivity extends AppCompatActivity implements View.OnClickL
 
 
         presenterInCreateCV.getCVFromUid(uid);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.listjob_actionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.tbHome:
+                Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -9,23 +9,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:textSize="35dp"/>
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="#000"/>
         <RatingBar
             android:id="@+id/rbComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="1"/>
+            android:rating="3.5"
+            style="@style/Base.Widget.AppCompat.RatingBar.Small"
+            android:scaleY="1.5"
+            android:scaleX="1.5"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="20dp"
+            android:progressBackgroundTint="@color/colorPrimaryMinLight"
+            android:stepSize="0.1"/>
         <TextView
             android:id="@+id/txtCmtDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#000"
+
             android:text="dd/mm/yyyy"
-            android:textSize="20dp"/>
+            android:textSize="10sp"/>
         <TextView
             android:id="@+id/txtComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Comment"
-            android:textSize="25dp"/>
+            android:layout_marginTop="12dp"
+            android:textColor="#000"
+            android:textSize="16sp"/>
     </LinearLayout>

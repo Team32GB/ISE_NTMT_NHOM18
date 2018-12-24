@@ -2,6 +2,8 @@ package com.example.team32gb.jobit;
 
 import androidx.annotation.NonNull;
 
+import com.example.team32gb.jobit.Utility.Util;
+import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.WaitingAcceptNTD.WaitingAcceptFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
@@ -67,6 +69,13 @@ public class JobRecruitmentActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+            case R.id.tbHome:
+                Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+        }
         return super.onOptionsItemSelected(item);
     }
     public void setFragment(Fragment fragment){

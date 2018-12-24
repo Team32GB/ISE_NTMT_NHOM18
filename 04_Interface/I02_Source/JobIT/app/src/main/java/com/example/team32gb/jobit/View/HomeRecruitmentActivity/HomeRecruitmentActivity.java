@@ -43,6 +43,17 @@ public class HomeRecruitmentActivity extends AppCompatActivity implements View.O
         btnChangeUserType.setOnClickListener(this);
         btnSignOurRecruit.setOnClickListener(this);
 
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(Config.USER_TYPE,Config.IS_RECRUITER);
+        editor.apply();
     }
 
     @Override

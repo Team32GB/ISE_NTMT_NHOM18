@@ -1,47 +1,47 @@
 package com.example.team32gb.jobit.View.Evaluation;
 
 public class Comment {
-    private String Title;
-    private int Star;
-    private String Date;
-    private String Comment;
+    private String title;
+    private float star;
+    private String date;
+    private String comment;
 
-    public Comment(String title, int star, String date, String comment) {
-        Title = title;
-        Star = star;
-        Date = date;
-        Comment = comment;
+    public Comment(String title, float star, String date, String comment) {
+        this.title = title;
+        this.star = star;
+        this.date = date;
+        this.comment = comment;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
-    public int getStar() {
-        return Star;
+    public float getStar() {
+        return star;
     }
 
-    public void setStar(int star) {
-        Star = star;
+    public void setStar(float star) {
+        this.star = star;
     }
 
     public String getDate() {
-        return Date;
+        return date;
     }
 
     public void setDate(String date) {
-        Date = date;
+        this.date = date;
     }
 
     public String getComment() {
-        return Comment;
+        return comment;
     }
 
     public void setComment(String comment) {
-        Comment = comment;
+        this.comment = comment;
     }
 }

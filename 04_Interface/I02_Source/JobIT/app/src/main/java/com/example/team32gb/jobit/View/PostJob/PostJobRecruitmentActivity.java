@@ -28,6 +28,7 @@ import com.example.team32gb.jobit.Presenter.PostJob.PresenterInPostJob;
 import com.example.team32gb.jobit.Presenter.PostJob.PresenterPostJob;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Util;
+import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
@@ -308,12 +309,19 @@ public class PostJobRecruitmentActivity extends AppCompatActivity implements Vie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.detailjob_actionbar, menu);
+        menuInflater.inflate(R.menu.listjob_actionbar, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+            case R.id.tbHome:
+                Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+        }
         return super.onOptionsItemSelected(item);
     }
 

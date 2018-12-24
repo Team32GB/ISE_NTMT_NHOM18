@@ -16,6 +16,8 @@ import com.example.team32gb.jobit.Presenter.WaitingForInterviewNTV.PresenterInIn
 import com.example.team32gb.jobit.Presenter.WaitingForInterviewNTV.PresenterInterview;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
+import com.example.team32gb.jobit.Utility.Util;
+import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -68,6 +70,15 @@ public class InterviewActivity extends AppCompatActivity implements ViewListJobI
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.tbHome:
+                Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
