@@ -41,10 +41,10 @@ public class Config {
     public static final long APPROVAL_SUCCESSFUL = 1;
     public static final long APPROVAL_FAIL = 2;
 
-    public static final String ID_REPORT_KEY = "idreport";
+    public static final String ID_REPORT_KEY = "idReport";
     public static final String DATE_SEND_KEY = "date";
-    public static final String ID_ACCUSED_KEY = "idaccused";
-    public static final String ID_COMPANY_KEY ="idcompany";
+    public static final String ID_ACCUSED_KEY = "idAccused";
+    public static final String ID_COMPANY_KEY ="idCompany";
 
     public static long MILISECONDOFDAY = 86400000;
 }

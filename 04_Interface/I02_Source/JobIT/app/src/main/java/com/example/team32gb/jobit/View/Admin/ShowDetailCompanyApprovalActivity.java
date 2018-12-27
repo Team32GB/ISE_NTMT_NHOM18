@@ -153,6 +153,10 @@ public class ShowDetailCompanyApprovalActivity extends AppCompatActivity {
                     }
                 });
             }
+            else{
+                Toast.makeText(this, "Không thể lấy dữ liệu", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
         }
 
     }
@@ -160,24 +164,24 @@ public class ShowDetailCompanyApprovalActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String avatarPath = Environment.getExternalStorageDirectory() + "/logo" +
-                "" + "/" + idCompany + ".jpg";
-        Log.e("kiemtraanh", avatarPath);
-        Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
-        if (bitmap != null && avatarPath != null && !avatarPath.isEmpty()) {
-            imgAvatarCompanyApproval.setBackground(new BitmapDrawable(bitmap));
-        } else {
-            long ONE_MEGABYTE = 1024 * 1024;
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(Config.REF_FOLDER_LOGO).child(idCompany);
-            storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    imgAvatarCompanyApproval.setImageBitmap(bitmap);
-                    Util.saveImageToLocal(bitmap, idCompany);
-                }
-            });
-        }
+//        String avatarPath = Environment.getExternalStorageDirectory() + "/logo" +
+//                "" + "/" + idCompany + ".jpg";
+//        Log.e("kiemtraanh", avatarPath);
+//        Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+//        if (bitmap != null && avatarPath != null && !avatarPath.isEmpty()) {
+//            imgAvatarCompanyApproval.setBackground(new BitmapDrawable(bitmap));
+//        } else {
+//            long ONE_MEGABYTE = 1024 * 1024;
+//            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(Config.REF_FOLDER_LOGO).child(idCompany);
+//            storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//                @Override
+//                public void onSuccess(byte[] bytes) {
+//                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                    imgAvatarCompanyApproval.setImageBitmap(bitmap);
+//                    Util.saveImageToLocal(bitmap, idCompany);
+//                }
+//            });
+//        }
     }
 
     void setUpDialog() {

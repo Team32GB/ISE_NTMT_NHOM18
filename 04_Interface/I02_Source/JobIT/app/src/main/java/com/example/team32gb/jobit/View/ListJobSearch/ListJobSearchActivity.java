@@ -1,6 +1,7 @@
 package com.example.team32gb.jobit.View.ListJobSearch;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import androidx.appcompat.app.ActionBar;
@@ -25,6 +26,8 @@ import com.example.team32gb.jobit.Presenter.ListJobSearch.PresenterInListJobSear
 import com.example.team32gb.jobit.Presenter.ListJobSearch.PresenterLogicListJobSearch;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
+import com.example.team32gb.jobit.View.Admin.AdminHomeActivity;
+import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.example.team32gb.jobit.View.ListJob.ListJobViewAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -87,6 +90,15 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.tbHome:
+                Intent intent = new Intent(this, HomeJobSeekerActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+        }
         return super.onOptionsItemSelected(item);
     }
 

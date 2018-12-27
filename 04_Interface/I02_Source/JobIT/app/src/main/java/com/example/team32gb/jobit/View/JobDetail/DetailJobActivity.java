@@ -172,6 +172,7 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+<<<<<<< Updated upstream
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
@@ -184,6 +185,16 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
                     Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
                 }
                 break;
+=======
+        switch (item.getItemId()){
+            case R.id.tbHome:
+                Intent intent = new Intent(this, HomeJobSeekerActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+>>>>>>> Stashed changes
         }
         return super.onOptionsItemSelected(item);
     }
