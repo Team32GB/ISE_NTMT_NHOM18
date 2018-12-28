@@ -48,44 +48,6 @@ exports.thongBaoUngVienApply = functions.database.ref('/choDuyets/{companyId}/{i
         return admin.messaging().sendToDevice(fcm_token.val(), payload);
     });
 }));
-// exports.thongBaoDuyetUngVienApply = functions.database.ref('/choDuyets/{companyId}/{idJob}/{idUngVien}')
-// .onCreate(async(snapshot, context) => {
-//     const companyId = context.params.companyId
-//     const idJob = context.params.idJob
-//     const idUngVien = context.params.idUngVien
-//     const getNameUngVien = admin.database().ref('/jobseekers/' + idUngVien + '/email').once('value')
-//     const getTinTuyenDung = admin.database().ref('/tinTuyenDungs/' + companyId + '/' + idJob + '/nameJob').once('value')
-//     const results = await Promise.all([getNameUngVien,getTinTuyenDung,getTimeJob])
-//     const nameSnapshot = results[0]
-//     const tinTuyenDungSnapshot = results[1]
-//     const timeJobSnapshot = results[2]
-//     const nameUngVien = nameSnapshot.val()
-//     const tinTuyenDung = tinTuyenDungSnapshot.val()
-//     const timeJob = timeJobSnapshot.val()
-//     console.log('companyId: ' + companyId + ',jobId: ' + idJob + ",idungvien: " + idUngVien + ",time "  + timeJob)
-//     console.log('name: ' + nameUngVien + ' tin: ' + tinTuyenDung)
-//     let tinTuyenDungStr : string = tinTuyenDung
-//     const payload = {
-//         notification:{
-//             title: 'Có ứng viên apply',
-//             body: 'Ứng viên ' + nameUngVien + ' đã apply ' + tinTuyenDung + ' của bạn', 
-//             badge: '1',
-//             sound: 'default'
-//         },
-//         data:{
-//         	type: 'thongBaoUngVienApply',
-//         	idCompany: companyId + '',
-//         	idJob: idJob + '',
-//         	nameJob: tinTuyenDungStr,
-//         	timeJob: timeJob + ''
-//         }
-//     }
-//     return admin.database().ref('/fcm_tokens/' + companyId + '/token').once('value')
-//     .then(fcm_token => {
-//             console.log('token available : ' + fcm_token.val())
-//            return admin.messaging().sendToDevice(fcm_token.val(),payload)
-//     })
-// })
 exports.thongBaoPheDuyetNhaTuyenDung = functions.database.ref('/companys/{companyId}/approvalMode')
     .onUpdate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
     const companyId = context.params.companyId;
@@ -173,12 +135,12 @@ exports.thongBaoAdminToCaoRecruiterMoi = functions.database.ref('/reports/recrui
     const idReport = context.params.idReport;
     const name = admin.database().ref('/companys/' + idUser + '/name').once('value');
     const dateSend = admin.database().ref('/reportWaitingAdminApproval/recruiters/' + idReport + '/dateSendReport').once('value');
-    console.log('id user: ' + idUser + ', name user: ' + name);
     const results = yield Promise.all([name, dateSend]);
     const dataSnapshot = results[0];
     const nameCompany = dataSnapshot.val();
     const dataDate = results[1];
     const date = dataDate.val();
+    console.log('id user: ' + idUser + ', name user: ' + name, ', date: ' + date);
     const payload = {
         notification: {
             title: 'Tố cáo mới',
@@ -190,7 +152,7 @@ exports.thongBaoAdminToCaoRecruiterMoi = functions.database.ref('/reports/recrui
             type: 'thongBaoAdminToCaoRecruiterMoi',
             idReport: idReport + '',
             idUser: idUser + '',
-            date: date,
+            date: date + '',
             idAccused: idUser + ''
         }
     };
@@ -206,12 +168,12 @@ exports.thongBaoAdminToCaoJobSeekerMoi = functions.database.ref('/reports/jobsee
     const idReport = context.params.idReport;
     const name = admin.database().ref('/jobseekers/' + idUser + '/name').once('value');
     const dateSend = admin.database().ref('/reportWaitingAdminApproval/jobseekers/' + idReport + '/dateSendReport').once('value');
-    console.log('id user: ' + idUser + ', name user: ' + name);
     const results = yield Promise.all([name, dateSend]);
     const dataSnapshot = results[0];
     const nameJobseeker = dataSnapshot.val();
     const dataDate = results[1];
     const date = dataDate.val();
+    console.log('id user: ' + idUser + ', name user: ' + name + ', date: ' + date);
     const payload = {
         notification: {
             title: 'Tố cáo mới',
@@ -223,7 +185,7 @@ exports.thongBaoAdminToCaoJobSeekerMoi = functions.database.ref('/reports/jobsee
             type: 'thongBaoAdminToCaoJobSeekerMoi',
             idReport: idReport + '',
             idUser: idUser + '',
-            date: date,
+            date: date + '',
             idAccused: idUser + ''
         }
     };
@@ -238,12 +200,12 @@ exports.thongBaoAdminHoSoMoi = functions.database.ref('/companysWaitingAdminAppr
     const idCompany = context.params.idCompany;
     const name = admin.database().ref('/companys/' + idCompany + '/name').once('value');
     const dateSend = admin.database().ref('/companysWaitingAdminApproval/' + idCompany + '/dateSendApproval').once('value');
-    console.log('id company: ' + idCompany + ', name company: ' + name);
     const results = yield Promise.all([name, dateSend]);
     const dataSnapshot = results[0];
     const nameCompany = dataSnapshot.val();
     const dataDate = results[1];
     const date = dataDate.val();
+    console.log('id company: ' + idCompany + ', name company: ' + name, ', date: ' + date);
     const payload = {
         notification: {
             title: 'Hồ sơ cần duyệt mới',
@@ -254,7 +216,7 @@ exports.thongBaoAdminHoSoMoi = functions.database.ref('/companysWaitingAdminAppr
         data: {
             type: 'thongBaoAdminHoSoMoi',
             idCompany: idCompany + '',
-            date: date
+            date: date + ''
         }
     };
     return admin.database().ref('/fcm_tokens/Xf48VViAaoMAcNvgWvveiDepiq02/token').once('value')

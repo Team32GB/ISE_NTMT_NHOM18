@@ -172,18 +172,20 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
                 onBackPressed();
                 break;
             case R.id.tbHome:
-                if(typeUser == Config.IS_JOB_SEEKER) {
-                    Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
+                if (typeUser == Config.IS_JOB_SEEKER) {
+                    Util.jumpActivityRemoveStack(this, HomeJobSeekerActivity.class);
                 } else {
-                    Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+                    Util.jumpActivityRemoveStack(this, HomeRecruitmentActivity.class);
                 }
                 break;
+
         }
         return super.onOptionsItemSelected(item);
     }

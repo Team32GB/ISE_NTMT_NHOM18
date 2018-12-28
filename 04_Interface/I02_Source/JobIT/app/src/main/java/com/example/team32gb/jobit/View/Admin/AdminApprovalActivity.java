@@ -125,6 +125,7 @@ public class AdminApprovalActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putString(ID_COMPANY_KEY, model.getIdCompany());
                         bundle.putString(DATE_SEND_KEY, model.getDateSendApproval());
+                        intent.putExtra("bundle", bundle);
                         startActivity(intent);
                     }
                 });

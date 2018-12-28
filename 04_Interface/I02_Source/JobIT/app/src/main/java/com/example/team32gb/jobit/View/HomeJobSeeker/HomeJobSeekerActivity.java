@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import io.paperdb.Paper;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
@@ -19,9 +21,13 @@ import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
 import com.example.team32gb.jobit.View.ProfileUser.ProfileUserActivity;
 import com.example.team32gb.jobit.View.ListJobSearch.ListJobSearchActivity;
 import com.example.team32gb.jobit.View.MyJob.MyJobActivity;
+import com.example.team32gb.jobit.View.RecentSearch.Search;
 import com.example.team32gb.jobit.View.SelectUserType.SelectUserTypeActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btnSearch;
@@ -32,8 +38,10 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
     private Button btnAccount;
     private Button btnSignOut;
     private Button btnChangeUserType;
+    private Button btnDown;
     private AppCompatAutoCompleteTextView edtTimKiem, edtDiaDiem;
     private SharedPreferences sharedPreferences;
+    private RecyclerView recyclerView;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -52,6 +60,14 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         btnAccount = findViewById(R.id.btnAccount);
         btnSignOut = findViewById(R.id.btnSignOut);
         btnChangeUserType = findViewById(R.id.btnChangeUserType);
+        btnDown = findViewById(R.id.btnDown);
+        recyclerView = findViewById(R.id.rcRecent);
+
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        Paper.init(this);
 
         String countries[] = getResources().getStringArray(R.array.TinhThanh);
         ArrayAdapter adapterProvince = new ArrayAdapter(this,android.R.layout.simple_list_item_1,countries);
@@ -62,9 +78,6 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,searchs);
         edtTimKiem.setAdapter(adapter);
         edtTimKiem.setThreshold(1);
-
-
-
 
         firebaseAuth = FirebaseAuth.getInstance();
         sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -79,6 +92,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         btnMyJob.setOnClickListener(this);
         btnSignOut.setOnClickListener(this);
         btnAccount.setOnClickListener(this);
+        btnDown.setOnClickListener(this);
         btnChangeUserType.setOnClickListener(this);
 
     }
@@ -86,6 +100,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onStart() {
         super.onStart();
+        showRecentSearch();
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(Config.USER_TYPE,Config.IS_JOB_SEEKER);
@@ -141,10 +156,10 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
                 if(timKiem.trim().length() <= 0 && diaDiem.trim().length() <= 0) {
                     edtTimKiem.setError("Hãy nhập thông tin tìm kiếm");
                     edtDiaDiem.setError("Hãy nhập thông tin tìm kiếm");
-
                 } else {
                     bundle.putString("timKiem",edtTimKiem.getText().toString());
                     bundle.putString("diaDiem",edtDiaDiem.getText().toString());
+                    saveRecentSearch(new Search(timKiem,diaDiem));
                     intent.putExtra("bundle",bundle);
                     this.startActivity(intent);
                 }
@@ -185,9 +200,38 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
                 firebaseAuth.signOut();
                 Util.jumpActivity(this, SelectUserTypeActivity.class);
                 break;
+            case R.id.btnDown:
+                recyclerView.setVisibility(View.VISIBLE);
+                break;
             default:
                 break;
         }
 
+    }
+
+    void saveRecentSearch(Search search) {
+        List<Search> searches = Paper.book().read("searches");
+        if(searches == null) {
+            searches = new ArrayList<>();
+        }
+        searches.add(0,search);
+        Paper.book().write("searches",searches);
+        for (int i = 0;i < searches.size();i++) {
+            Log.e("kiemtraSearch",searches.get(i).getTimkiem());
+        }
+    }
+
+    void showRecentSearch() {
+        List<Search> searches = Paper.book().read("searches");
+        if(searches == null) return;
+        if(searches.size() > 3) {
+            List<Search> temp = new ArrayList<>();
+            temp.add(searches.get(0));
+            temp.add(searches.get(1));
+            temp.add(searches.get(2));
+            searches = temp;
+        }
+        RecenteSearchAdapter adapter = new RecenteSearchAdapter(this,searches);
+        recyclerView.setAdapter(adapter);
     }
 }

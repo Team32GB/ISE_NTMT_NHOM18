@@ -41,6 +41,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Map<String, String> dataMap = remoteMessage.getData();
             Bundle bundle = new Bundle();
             String type = dataMap.get("type");
+            Log.e("kiemtraFCM", "type: "+type);
             if (type.equals("thongBaoUngVienApply")) {
                 String idCompany = dataMap.get("idCompany");
                 String idJob = dataMap.get("idJob");
@@ -56,7 +57,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String idreport = dataMap.get(ID_REPORT_KEY);
                 String datesend = dataMap.get(DATE_SEND_KEY);
                 String idaccused = dataMap.get(ID_ACCUSED_KEY);
-                Log.e("kiemtraFCM", "id report: "+ idreport + " date: "+datesend +" id accused: "+ idaccused);
+                Log.e("kiemtraFCM", "id report: "+ idreport + ", date: "+datesend +" id accused: "+ idaccused);
                 bundle.putString(ID_REPORT_KEY, idreport);
                 bundle.putString(DATE_SEND_KEY, datesend);
                 bundle.putString(ID_ACCUSED_KEY, idaccused);
@@ -64,6 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             else if (type.equals("thongBaoAdminHoSoMoi")){
                 bundle.putString(ID_COMPANY_KEY, dataMap.get(ID_COMPANY_KEY));
                 bundle.putString(DATE_SEND_KEY, dataMap.get(DATE_SEND_KEY));
+                Log.e("Thong bao admin", "Thong bao admin co ho so moi" + dataMap.get(ID_COMPANY_KEY)+"date: "+ dataMap.get(DATE_SEND_KEY));
             }
 
 
@@ -102,6 +104,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         else if (type.equals("thongBaoAdminHoSoMoi")){
             intent = new Intent(this, ShowDetailCompanyApprovalActivity.class);
             intent.putExtra("bundle", bundle);
+            Log.e("Thong bao admin", "Admin nhay activity show detail approval");
         }
         else {
             intent = new Intent(this, TestDuyet.class);
@@ -122,7 +125,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             builder = new Notification.Builder(this)
                     .setContentTitle(title)
                     .setContentText(body)
-                    .setAutoCancel(false)
+                    .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setSmallIcon(R.drawable.icon_app)
                     .setChannelId(channelId)
@@ -131,7 +134,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             builder = new Notification.Builder(this)
                     .setContentTitle(title)
                     .setContentText(body)
-                    .setAutoCancel(false)
+                    .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setSmallIcon(R.drawable.icon_app)
                     .setSound(alarmSound);

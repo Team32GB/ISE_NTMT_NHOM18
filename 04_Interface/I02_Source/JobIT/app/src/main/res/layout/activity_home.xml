@@ -102,11 +102,48 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAccount"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:icon="@drawable/ic_user"
                 style="@style/StyleButtonList"
                 android:text="user name"
                 android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecent"
+                    style="@style/StyleButtonList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_toStartOf="@+id/btnDown"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="Tìm kiếm gần đây"
+                    app:icon="@drawable/ic_timer" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDown"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    style="@style/StyleButtonList"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="8dp"
+                    android:layout_alignParentEnd="true"
+                    android:paddingBottom="8dp"
+                    app:icon="@drawable/ic_down" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcRecent"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMyJob"

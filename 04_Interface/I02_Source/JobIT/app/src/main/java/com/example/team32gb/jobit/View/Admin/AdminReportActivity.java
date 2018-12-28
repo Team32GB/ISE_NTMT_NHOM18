@@ -11,7 +11,10 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
+
 
 public class AdminReportActivity extends AppCompatActivity {
     private TabLayout tlReport;
@@ -36,6 +39,7 @@ public class AdminReportActivity extends AppCompatActivity {
         vpReport.setAdapter(adapter);
         tlReport.setupWithViewPager(vpReport);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
