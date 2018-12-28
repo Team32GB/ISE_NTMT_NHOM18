@@ -16,6 +16,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewAdapterInvite extends RecyclerView.Adapter<ViewAdapterInvite.MyViewHolder> {
     Context context;
@@ -38,8 +39,6 @@ public class ViewAdapterInvite extends RecyclerView.Adapter<ViewAdapterInvite.My
         myViewHolder.txtName.setText(mData.get(i).getName());
         Log.e("kiemtratime1",mData.get(i).getName());
         myViewHolder.txtTime.setText(Util.getSubTime(mData.get(i).getDayApplied()));
-
-
     }
 
     @Override
@@ -51,11 +50,13 @@ public class ViewAdapterInvite extends RecyclerView.Adapter<ViewAdapterInvite.My
 
         private TextView txtName;
         private TextView txtTime;
+        private CircleImageView imgAvatar;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txtName = itemView.findViewById(R.id.txtName);
             txtTime = itemView.findViewById(R.id.txtTime);
+            imgAvatar= itemView.findViewById(R.id.imgAvatar);
         }
     }
 }

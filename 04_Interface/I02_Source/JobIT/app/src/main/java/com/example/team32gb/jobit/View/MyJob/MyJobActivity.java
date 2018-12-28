@@ -43,7 +43,7 @@ public class MyJobActivity extends AppCompatActivity implements View.OnClickList
         btnMoiLam = this.findViewById(R.id.btnMoiLam);
 
         myToolBar = findViewById(R.id.tb);
-        myToolBar.setTitle("Chi tiết");
+        myToolBar.setTitle("Công việc của tôi");
         setSupportActionBar(myToolBar);
 
         actionBar = getSupportActionBar();

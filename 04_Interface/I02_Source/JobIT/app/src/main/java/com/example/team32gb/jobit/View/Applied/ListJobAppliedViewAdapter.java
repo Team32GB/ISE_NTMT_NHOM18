@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class ListJobAppliedViewAdapter extends RecyclerView.Adapter<ListJobAppli
         myViewHolder.txtNameCompany.setText(mdata.get(i).getNameCompany());
         myViewHolder.txtTime.setText(Util.getSubTime(mdata.get(i).getTimeApplied()));
         myViewHolder.txtTime.setText(Util.getSubTime(mdata.get(i).getDataPostJob().getTime()));
+        myViewHolder.cbFav.setVisibility(View.GONE);
         String minSalary = mdata.get(i).getDataPostJob().getMinSalary();
         String maxSalary = mdata.get(i).getDataPostJob().getMaxSalary();
         myViewHolder.txtSalary.setText("Từ $" + minSalary + " đến $" + maxSalary);
@@ -92,6 +94,7 @@ public class ListJobAppliedViewAdapter extends RecyclerView.Adapter<ListJobAppli
         private TextView txtTime;
         private TextView txtSalary;
         private ImageView imageView;
+        private CheckBox cbFav;
         // private RelativeLayout item_listjob;
         private ItemClickListener itemClickListener;
 
@@ -106,6 +109,7 @@ public class ListJobAppliedViewAdapter extends RecyclerView.Adapter<ListJobAppli
             txtNameCompany = itemView.findViewById(R.id.txtTenCT);
             txtTime = itemView.findViewById(R.id.txtThơiGian);
             txtSalary = itemView.findViewById(R.id.txtSalary);
+            cbFav = itemView.findViewById(R.id.cbFav);
 
 
             imageView = itemView.findViewById(R.id.imgAvatarCompany);

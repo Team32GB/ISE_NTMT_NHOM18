@@ -40,7 +40,7 @@ public class SwipeController extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        return makeMovementFlags(0, ItemTouchHelper.LEFT);
     }
 
     @Override

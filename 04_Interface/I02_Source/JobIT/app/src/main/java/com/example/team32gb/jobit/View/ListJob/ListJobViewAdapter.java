@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -119,6 +120,17 @@ public class ListJobViewAdapter extends RecyclerView.Adapter<ListJobViewAdapter.
                 context.getApplicationContext().startActivity(intent);
             }
         });
+
+        myViewHolder.cbSaved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    Util.saveJob(context,FirebaseDatabase.getInstance().getReference(),uid,idCompany,idJob);
+                } else {
+                    Util.RemoveSaveJob(context,FirebaseDatabase.getInstance().getReference(),uid,idCompany,idJob);
+                }
+            }
+        });
     }
 
     @Override
@@ -152,7 +164,7 @@ public class ListJobViewAdapter extends RecyclerView.Adapter<ListJobViewAdapter.
             txtProvince = itemView.findViewById(R.id.txtProvince);
             imageView = itemView.findViewById(R.id.imgAvatarCompany);
             item_listjob = itemView.findViewById(R.id.item_listjob);
-            cbSaved = itemView.findViewById(R.id.imgFav);
+            cbSaved = itemView.findViewById(R.id.cbFav);
         }
 
         @Override

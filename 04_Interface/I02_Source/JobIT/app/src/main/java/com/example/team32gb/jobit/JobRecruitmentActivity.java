@@ -63,7 +63,7 @@ public class JobRecruitmentActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.detailjob_actionbar, menu);
+        menuInflater.inflate(R.menu.listjob_actionbar, menu);
         return true;
     }
 

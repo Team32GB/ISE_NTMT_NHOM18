@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +23,9 @@ import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.JobDetail.DetailJobActivity;
 import com.example.team32gb.jobit.View.ListJobSearch.ItemClickListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -39,7 +44,7 @@ public class ListJobInterviewViewAdapter extends RecyclerView.Adapter<ListJobInt
     @NonNull
     @Override
     public ListJobInterviewViewAdapter.MyViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
-        Log.e("kiemtraid", "oncreateViewHolder" + i);
+//        Log.e("kiemtraid", "oncreateViewHolder" + i);
         View v;
         v = LayoutInflater.from(context).inflate(R.layout.activity_item_listjob, viewGroup, false);
         final ListJobInterviewViewAdapter.MyViewHolder viewHolder = new ListJobInterviewViewAdapter.MyViewHolder(v);
@@ -48,11 +53,12 @@ public class ListJobInterviewViewAdapter extends RecyclerView.Adapter<ListJobInt
 
     @Override
     public void onBindViewHolder(@NonNull final ListJobInterviewViewAdapter.MyViewHolder myViewHolder, final int i) {
-        String idCompany = mdata.get(i).getDataPostJob().getIdCompany();
+        final String idCompany = mdata.get(i).getDataPostJob().getIdCompany();
         Log.e("kiemtraid", "onBindViewHolder" + mdata.get(i).getTimeApplied() + ":" + idCompany);
         myViewHolder.txtNameJob.setText(mdata.get(i).getDataPostJob().getNameJob());
-        myViewHolder.txtNameCompany.setText(mdata.get(i).getNameCompany());
+        myViewHolder.txtNameCompany.setText(mdata.get(i).getDataPostJob().getNameCompany());
         myViewHolder.txtTime.setText(Util.getSubTime(mdata.get(i).getTimeApplied()));
+        myViewHolder.cbFav.setVisibility(View.GONE);
         String minSalary = mdata.get(i).getDataPostJob().getMinSalary();
         String maxSalary = mdata.get(i).getDataPostJob().getMaxSalary();
         myViewHolder.txtSalary.setText("Từ $" + minSalary + " đến $" + maxSalary);
@@ -76,6 +82,10 @@ public class ListJobInterviewViewAdapter extends RecyclerView.Adapter<ListJobInt
                 context.getApplicationContext().startActivity(intent);
             }
         });
+
+//        mData.remove(i);
+//        notifyItemRemoved(i);
+//        notifyItemRangeChanged(i, getItemCount());
     }
 
     @Override
@@ -90,6 +100,8 @@ public class ListJobInterviewViewAdapter extends RecyclerView.Adapter<ListJobInt
         private TextView txtTime;
         private TextView txtSalary;
         private ImageView imageView;
+        private CheckBox cbFav;
+
         // private RelativeLayout item_listjob;
         private ItemClickListener itemClickListener;
 
@@ -104,8 +116,7 @@ public class ListJobInterviewViewAdapter extends RecyclerView.Adapter<ListJobInt
             txtNameCompany = itemView.findViewById(R.id.txtTenCT);
             txtTime = itemView.findViewById(R.id.txtThơiGian);
             txtSalary = itemView.findViewById(R.id.txtSalary);
-
-
+            cbFav = itemView.findViewById(R.id.cbFav);
             imageView = itemView.findViewById(R.id.imgAvatarCompany);
             //    item_listjob = itemView.findViewById(R.id.item_listjob);
         }

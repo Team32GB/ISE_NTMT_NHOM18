@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,9 +50,10 @@ public class ListJobInviteViewAdapter extends RecyclerView.Adapter<ListJobInvite
     public void onBindViewHolder(@NonNull final ListJobInviteViewAdapter.MyViewHolder myViewHolder, final int i) {
         Log.e("kiemtraid", "onBindViewHolder" + mdata.get(i).getTimeApplied());
         myViewHolder.txtNameJob.setText(mdata.get(i).getDataPostJob().getNameJob());
-        myViewHolder.txtNameCompany.setText(mdata.get(i).getNameCompany());
+        myViewHolder.txtNameCompany.setText(mdata.get(i).getDataPostJob().getNameCompany());
         myViewHolder.txtTime.setText(Util.getSubTime(mdata.get(i).getTimeApplied()));
         myViewHolder.txtTime.setText(Util.getSubTime(mdata.get(i).getDataPostJob().getTime()));
+        myViewHolder.cbFav.setVisibility(View.GONE);
         String minSalary = mdata.get(i).getDataPostJob().getMinSalary();
         String maxSalary = mdata.get(i).getDataPostJob().getMaxSalary();
         myViewHolder.txtSalary.setText("Từ $" + minSalary + " đến $" + maxSalary);
@@ -89,6 +91,7 @@ public class ListJobInviteViewAdapter extends RecyclerView.Adapter<ListJobInvite
         private TextView txtTime;
         private TextView txtSalary;
         private ImageView imageView;
+        private CheckBox cbFav;
         // private RelativeLayout item_listjob;
         private ItemClickListener itemClickListener;
 
@@ -103,7 +106,7 @@ public class ListJobInviteViewAdapter extends RecyclerView.Adapter<ListJobInvite
             txtNameCompany = itemView.findViewById(R.id.txtTenCT);
             txtTime = itemView.findViewById(R.id.txtThơiGian);
             txtSalary = itemView.findViewById(R.id.txtSalary);
-
+            cbFav = itemView.findViewById(R.id.cbFav);
 
             imageView = itemView.findViewById(R.id.imgAvatarCompany);
             //    item_listjob = itemView.findViewById(R.id.item_listjob);

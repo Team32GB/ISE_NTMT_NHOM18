@@ -43,8 +43,6 @@ public class HomeRecruitmentActivity extends AppCompatActivity implements View.O
         btnChangeUserType.setOnClickListener(this);
         btnSignOurRecruit.setOnClickListener(this);
 
-
-
     }
 
     @Override

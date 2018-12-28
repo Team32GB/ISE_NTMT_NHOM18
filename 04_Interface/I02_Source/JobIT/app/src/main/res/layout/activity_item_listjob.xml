@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imgAvatarCompany"
-        android:layout_toStartOf="@+id/imgFav"
+        android:layout_toStartOf="@+id/cbFav"
         android:text="Tên công việc"
         android:textSize="15dp"
         attribute='@{"nameJob"}'
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtTenCV"
         android:layout_alignStart="@+id/txtTenCV"
-        android:layout_toStartOf="@+id/imgFav"
+        android:layout_toStartOf="@+id/cbFav"
         android:text="Tên công ty"
         android:maxLines="1"
         android:textSize="13dp" />
@@ -81,7 +81,7 @@
         android:textSize="10dp" />
 
     <CheckBox
-        android:id="@+id/imgFav"
+        android:id="@+id/cbFav"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentTop="true"

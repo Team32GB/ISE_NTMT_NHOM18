@@ -38,6 +38,8 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
     private RecyclerView recyclerView;
     private PresenterInListJobSearch presenter;
     private ProgressDialog progressDialog;
+    private String timKiem = "";
+    private String diaDiem = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +67,17 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
         presenter = new PresenterLogicListJobSearch(this);
         presenter.onCreate();
         Bundle bundle = getIntent().getBundleExtra("bundle");
-        String timKiem = bundle.getString("timKiem");
-        String diaDiem = bundle.getString("diaDiem");
+        timKiem = bundle.getString("timKiem");
+        diaDiem = bundle.getString("diaDiem");
 //        Log.e("kiemtraBundle",timKiem + ":" + diaDiem);
-        presenter.getListJob(timKiem,diaDiem);
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.getListJob(timKiem,diaDiem);
     }
 
     @Override

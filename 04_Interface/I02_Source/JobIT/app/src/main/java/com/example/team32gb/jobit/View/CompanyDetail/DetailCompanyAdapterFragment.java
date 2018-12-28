@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 public class DetailCompanyAdapterFragment extends FragmentPagerAdapter {
-    final static int TAB1_DETAIL_COMPANY = 1;
-    final static int TAB2_RATING = 0;
+    final static int TAB1_DETAIL_COMPANY = 0;
+    final static int TAB2_RATING = 1;
     final static int NUMBER_TAB =2;
     private Context context;
     private String idCompany;

@@ -8,11 +8,17 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.Model.PostJob.DataPostJob;
 import com.example.team32gb.jobit.Model.PostJob.ItemPostJob;
+import com.example.team32gb.jobit.View.JobDetail.DetailJobActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,10 +31,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 
 public class Util {
-
+    private static boolean isSuccess = false;
     public static ItemPostJob parserJSONToItemPost(JSONObject jsonObject) {
         ItemPostJob itemPostJob = new ItemPostJob();
         DataPostJob dataPostJob = new DataPostJob();
@@ -199,5 +206,35 @@ public class Util {
         if (bitmap != null && avatarPath != null && !avatarPath.isEmpty()) {
             btnAvatar.setBackground(new BitmapDrawable(bitmap));
         }
+    }
+
+    public static String getCurrentDay() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+        return sdf.format(new Date());
+    }
+
+    public static boolean saveJob(final Context context, DatabaseReference nodeRoot, String uid, String idCompany, String idJob) {
+        String currentDate = Util.getCurrentDay();
+        DatabaseReference dfDaLuus = nodeRoot.child("daLuus").child(uid).child(idCompany).child(idJob).child("timeSaved");
+        dfDaLuus.setValue(currentDate).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //Toast.makeText(context, "Lưu tin thất bại", Toast.LENGTH_LONG).show();
+                isSuccess = false;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //Toast.makeText(context, "Lưu tin thành công", Toast.LENGTH_LONG).show();
+                isSuccess = true;
+            }
+        });
+        return isSuccess;
+    }
+
+    public static void RemoveSaveJob(final Context context, DatabaseReference nodeRoot, String uid, String idCompany, String idJob) {
+        DatabaseReference dfRemove = nodeRoot.child("daLuus").child(uid).child(idCompany).child(idJob);
+        dfRemove.removeValue();
+        Toast.makeText(context,"Xóa thành công",Toast.LENGTH_LONG).show();
     }
 }
