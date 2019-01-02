@@ -1,6 +1,7 @@
 package com.example.team32gb.jobit.View.ChangePassword;
 
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.team32gb.jobit.R;
@@ -31,6 +33,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     private Button btnSavePassword;
     private Toolbar myToolBar;
     private ActionBar actionBar;
+    private TextView tvCancelChange;
     private int typeUser;
 
     @Override
@@ -42,9 +45,10 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         edtNewpassword = findViewById(R.id.edtNewpassword);
         edtComfirmNewPassword = findViewById(R.id.edtConfirmNewPassword);
         btnSavePassword = findViewById(R.id.btnSavePassword);
+        tvCancelChange = findViewById(R.id.tvCancelChange);
         myToolBar = findViewById(R.id.tb);
 
-        myToolBar.setTitle("Thông tin công ty");
+        myToolBar.setTitle("Thay đổi mật khẩu");
         setSupportActionBar(myToolBar);
 
         actionBar = getSupportActionBar();
@@ -54,7 +58,9 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         typeUser = sharedPreferences.getInt(Config.USER_TYPE, 0);
 
         btnSavePassword.setOnClickListener(this);
+        tvCancelChange.setOnClickListener(this);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -69,13 +75,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             case android.R.id.home:
                 onBackPressed();
             case R.id.tbHome:
-                if(typeUser == Config.IS_JOB_SEEKER) {
-                    Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
-                } else if(typeUser == Config.IS_RECRUITER){
-                    Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
-                } else {
-                    Util.jumpActivityRemoveStack(this,AdminHomeActivity.class);
-                }
+                    Util.jumpActivityRemoveStack(this, HomeJobSeekerActivity.class);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -83,28 +83,33 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btnSavePassword) {
-            if (checkInfoInput()) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                final String newPassword = edtNewpassword.getText().toString();
-                if (user != null) {
-                    user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                SharedPreferences sharedPreferences;
-                                sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString(Config.PASSWORD_USER,newPassword);
-                                editor.apply();
-                                Toast.makeText(ChangePasswordActivity.this, "Thay đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(ChangePasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+        switch (id) {
+            case R.id.btnSavePassword:
+                if (checkInfoInput()) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    final String newPassword = edtNewpassword.getText().toString();
+                    if (user != null) {
+                        user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    SharedPreferences sharedPreferences;
+                                    sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString(Config.PASSWORD_USER, newPassword);
+                                    editor.apply();
+                                    Toast.makeText(ChangePasswordActivity.this, "Thay đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ChangePasswordActivity.this, "Thay đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
+                break;
+            case R.id.tvCancelChange:
+                onBackPressed();
+                break;
         }
     }
 

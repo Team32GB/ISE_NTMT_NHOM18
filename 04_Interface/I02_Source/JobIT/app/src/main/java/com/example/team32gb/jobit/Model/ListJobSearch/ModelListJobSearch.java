@@ -60,6 +60,7 @@ public class ModelListJobSearch {
                                 itemPostJobs.add(Util.parserJSONToItemPost(object));
                             }
                            // Log.e("kiemtraAlgolia", itemPostJobs.get(0).getDataPostJob().getIdCompany());
+                            Log.e("kiemtraAlgolia", itemPostJobs.size() + "");
                             eventBus.post(itemPostJobs);
                         } catch (JSONException e1) {
                             e1.printStackTrace();

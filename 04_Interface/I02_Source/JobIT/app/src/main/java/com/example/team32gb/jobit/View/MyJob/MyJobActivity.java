@@ -20,6 +20,7 @@ import com.example.team32gb.jobit.View.Applied.AppliedActivity;
 import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.InviteJob.InviteJobActivity;
+import com.example.team32gb.jobit.View.RecentSearch.RecentSearch;
 import com.example.team32gb.jobit.View.SavedJob.SavedJobActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
 import com.example.team32gb.jobit.View.WaitingForInterview.InterviewActivity;
@@ -31,6 +32,7 @@ public class MyJobActivity extends AppCompatActivity implements View.OnClickList
     private Button btnAppliedJob;
     private Button btnInterviewJob;
     private Button btnMoiLam;
+    private Button btnRecentSearch;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -41,6 +43,7 @@ public class MyJobActivity extends AppCompatActivity implements View.OnClickList
         btnAppliedJob = this.findViewById(R.id.btnAppliedJob);
         btnInterviewJob = this.findViewById(R.id.btnInterviewJob);
         btnMoiLam = this.findViewById(R.id.btnMoiLam);
+        btnRecentSearch = this.findViewById(R.id.btnRecentSearch);
 
         myToolBar = findViewById(R.id.tb);
         myToolBar.setTitle("Công việc của tôi");
@@ -56,6 +59,7 @@ public class MyJobActivity extends AppCompatActivity implements View.OnClickList
         btnAppliedJob.setOnClickListener(this);
         btnInterviewJob.setOnClickListener(this);
         btnMoiLam.setOnClickListener(this);
+        btnRecentSearch.setOnClickListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,6 +84,9 @@ public class MyJobActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
 
         switch (v.getId()){
+            case R.id.btnRecentSearch:
+                Util.jumpActivity(this,RecentSearch.class);
+                break;
             case R.id.btnSavedJob:
                 if(sharedPreferences.getBoolean(Config.IS_LOGGED,false)) {
                     Util.jumpActivity(this,SavedJobActivity.class);

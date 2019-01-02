@@ -7,32 +7,18 @@
     android:background="@color/colorPrimaryMinLight"
     tools:context=".View.HomeRecruitmentActivity.HomeRecruitmentActivity">
 
-    <RelativeLayout
-        android:id="@+id/RlInf"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="16dp"
-        android:background="@color/colorPrimaryLight"
-        >
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_recruitment"
-            />
-
-        <TextView
-            android:id="@+id/txtNTD"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           android:gravity="center"
-            android:text="Nhà tuyển dụng"
-            android:textColor="#ffffff"
-            android:textSize="30sp"
-            android:textStyle="italic" />
-    </RelativeLayout>
+   <ImageView
+       android:id="@+id/imgIt"
+       android:layout_width="match_parent"
+       android:layout_height="160dp"
+       android:layout_marginStart="16dp"
+       android:layout_marginEnd="16dp"
+       android:layout_marginTop="8dp"
+       android:scaleType="centerCrop"
+       android:src="@drawable/it"/>
 
     <LinearLayout
-        android:layout_below="@+id/RlInf"
+        android:layout_below="@+id/imgIt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

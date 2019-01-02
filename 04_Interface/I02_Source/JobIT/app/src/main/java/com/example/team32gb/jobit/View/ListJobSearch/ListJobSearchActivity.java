@@ -14,10 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.team32gb.jobit.Model.ListJobSearch.DataJob;
 import com.example.team32gb.jobit.Model.ListJobSearch.ItemJob;
@@ -26,6 +29,7 @@ import com.example.team32gb.jobit.Presenter.ListJobSearch.PresenterInListJobSear
 import com.example.team32gb.jobit.Presenter.ListJobSearch.PresenterLogicListJobSearch;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
+import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.Admin.AdminHomeActivity;
 import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.example.team32gb.jobit.View.ListJob.ListJobViewAdapter;
@@ -35,12 +39,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListJobSearchActivity extends AppCompatActivity implements ViewListJobSearch {
+public class ListJobSearchActivity extends AppCompatActivity implements ViewListJobSearch, View.OnClickListener {
     private Toolbar myToolBar;
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private PresenterInListJobSearch presenter;
     private ProgressDialog progressDialog;
+    private TextView tvNothing;
+    private Button btnSearch;
     private String timKiem = "";
     private String diaDiem = "";
     @Override
@@ -55,7 +61,8 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
 
         myToolBar = findViewById(R.id.tbListJobSearch);
         recyclerView = this.findViewById(R.id.rvListJobSearch);
-
+        tvNothing = findViewById(R.id.nothing);
+        btnSearch = findViewById(R.id.btnSearch);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang xử lý...");
         progressDialog.setIndeterminate(true);
@@ -64,7 +71,7 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
 
         myToolBar.setTitle("Tìm việc");
         setSupportActionBar(myToolBar);
-
+        btnSearch.setOnClickListener(this);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         presenter = new PresenterLogicListJobSearch(this);
@@ -113,7 +120,10 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
     @Override
     public void showListJob(List<ItemPostJob> itemPostJobs) {
         Log.e("kiemtraAlgolia", "Ok");
-        Log.e("kiemtraalgolia",itemPostJobs.size() + " : " + itemPostJobs.get(0).getDataPostJob().getNameJob());
+        Log.e("kiemtraAlgolia",itemPostJobs.size() + " ok");
+        if(itemPostJobs.size() == 0) {
+            tvNothing.setVisibility(View.VISIBLE);
+        }
         ListJobViewAdapter adapter = new ListJobViewAdapter(this,itemPostJobs);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down);
@@ -121,5 +131,10 @@ public class ListJobSearchActivity extends AppCompatActivity implements ViewList
         progressDialog.dismiss();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutAnimation(animation);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Util.jumpActivity(this,HomeJobSeekerActivity.class);
     }
 }

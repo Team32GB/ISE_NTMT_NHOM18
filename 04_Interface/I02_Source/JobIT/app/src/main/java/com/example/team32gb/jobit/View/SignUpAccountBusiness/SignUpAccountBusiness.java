@@ -116,19 +116,7 @@ public class SignUpAccountBusiness extends AppCompatActivity implements View.OnC
             edtAddress.setText(infoCompanyModel.getAddress());
             edtIntroduce.setText(infoCompanyModel.getIntroduce());
 
-//            long ONE_MEGABYTE = 1024 * 1024;
-//            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(Config.REF_FOLDER_AVATAR).child(uid);
-//            storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//                @Override
-//                public void onSuccess(byte[] bytes) {
-//                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                    if (!infoCompanyModel.getAvatar().equals("")) {
-//                        imageButton.setBackground(new BitmapDrawable(bitmap));
-//                    }
-//                }
-//            });
             Util.loadImageFromFolderLogoLocal(imageButton,uid);
-
 
             List<String> lsQuyMoCongTy = Arrays.asList(getResources().getStringArray(R.array.QuyMoCongTy));
             List<String> lsLoaiHinhCongTy = Arrays.asList(getResources().getStringArray(R.array.DanhSachLoaiHinhCongTy));
@@ -284,6 +272,7 @@ public class SignUpAccountBusiness extends AppCompatActivity implements View.OnC
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean(Config.REGESTERED_INFO, true);
                     editor.apply();
+                    Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
                 } else {
                     Toast.makeText(getApplication(), "Đăng kí không thành thành công", Toast.LENGTH_LONG).show();
                 }

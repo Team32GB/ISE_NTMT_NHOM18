@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
@@ -21,6 +23,8 @@ import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
 import com.example.team32gb.jobit.View.ProfileUser.ProfileUserActivity;
 import com.example.team32gb.jobit.View.ListJobSearch.ListJobSearchActivity;
 import com.example.team32gb.jobit.View.MyJob.MyJobActivity;
+import com.example.team32gb.jobit.View.RecentSearch.RecentSearch;
+import com.example.team32gb.jobit.View.RecentSearch.RecenteSearchAdapter;
 import com.example.team32gb.jobit.View.RecentSearch.Search;
 import com.example.team32gb.jobit.View.SelectUserType.SelectUserTypeActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
@@ -29,16 +33,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnClickListener {
+public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private Button btnSearch;
-    private Button btnTimViec;
     private Button btnSignIn;
+    private Button btnRecent;
     private Button btnCreateCV;
     private Button btnMyJob;
     private Button btnAccount;
     private Button btnSignOut;
     private Button btnChangeUserType;
-    private Button btnDown;
+    private CheckBox cbMore;
     private AppCompatAutoCompleteTextView edtTimKiem, edtDiaDiem;
     private SharedPreferences sharedPreferences;
     private RecyclerView recyclerView;
@@ -55,12 +59,12 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         btnSearch = findViewById(R.id.btnSearch);
         btnSignIn = findViewById(R.id.btnDangNhap);
         btnCreateCV = findViewById(R.id.btnCV);
-        btnTimViec = findViewById(R.id.btnSearch);
         btnMyJob = findViewById(R.id.btnMyJob);
         btnAccount = findViewById(R.id.btnAccount);
         btnSignOut = findViewById(R.id.btnSignOut);
+        btnRecent = findViewById(R.id.btnRecent);
         btnChangeUserType = findViewById(R.id.btnChangeUserType);
-        btnDown = findViewById(R.id.btnDown);
+        cbMore = findViewById(R.id.cbMore);
         recyclerView = findViewById(R.id.rcRecent);
 
 
@@ -86,14 +90,14 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         }
 
         btnSearch.setOnClickListener(this);
-        btnTimViec.setOnClickListener(this);
         btnSignIn.setOnClickListener(this);
         btnCreateCV.setOnClickListener(this);
         btnMyJob.setOnClickListener(this);
         btnSignOut.setOnClickListener(this);
         btnAccount.setOnClickListener(this);
-        btnDown.setOnClickListener(this);
+        cbMore.setOnCheckedChangeListener(this);
         btnChangeUserType.setOnClickListener(this);
+        btnRecent.setOnClickListener(this);
 
     }
 
@@ -169,6 +173,9 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
                 Intent intentSI = new Intent(this, SignInActivity.class);
                 startActivity(intentSI);
                 break;
+            case R.id.btnRecent:
+                Util.jumpActivity(this,RecentSearch.class);
+                break;
             case R.id.btnCV:
                 if(sharedPreferences.getBoolean(Config.IS_LOGGED, false)) {
                     Util.jumpActivity(this,CreateCVActivity.class);
@@ -200,9 +207,6 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
                 firebaseAuth.signOut();
                 Util.jumpActivity(this, SelectUserTypeActivity.class);
                 break;
-            case R.id.btnDown:
-                recyclerView.setVisibility(View.VISIBLE);
-                break;
             default:
                 break;
         }
@@ -215,6 +219,9 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
             searches = new ArrayList<>();
         }
         searches.add(0,search);
+        if(searches.size() > 10) {
+            searches.remove(9);
+        }
         Paper.book().write("searches",searches);
         for (int i = 0;i < searches.size();i++) {
             Log.e("kiemtraSearch",searches.get(i).getTimkiem());
@@ -233,5 +240,14 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         }
         RecenteSearchAdapter adapter = new RecenteSearchAdapter(this,searches);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked) {
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.GONE);
+        }
     }
 }

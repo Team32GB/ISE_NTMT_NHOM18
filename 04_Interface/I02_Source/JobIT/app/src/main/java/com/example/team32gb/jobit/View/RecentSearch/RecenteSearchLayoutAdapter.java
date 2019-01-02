@@ -1,4 +1,4 @@
-package com.example.team32gb.jobit.View.HomeJobSeeker;
+package com.example.team32gb.jobit.View.RecentSearch;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,19 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.team32gb.jobit.R;
-import com.example.team32gb.jobit.View.RecentSearch.Search;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecenteSearchAdapter extends RecyclerView.Adapter<RecenteSearchAdapter.MyViewHolder> {
+public class RecenteSearchLayoutAdapter extends RecyclerView.Adapter<RecenteSearchLayoutAdapter.MyViewHolder> {
 
     Context context;
     List<Search> searches;
 
-    public RecenteSearchAdapter(Context context, List<Search> searches) {
+    public RecenteSearchLayoutAdapter(Context context, List<Search> searches) {
         this.context = context;
         this.searches = searches;
     }
@@ -28,7 +27,7 @@ public class RecenteSearchAdapter extends RecyclerView.Adapter<RecenteSearchAdap
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_recent_search,parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_recent_search_layout,parent,false);
         MyViewHolder viewHolder = new MyViewHolder(v);
         return viewHolder;
     }
@@ -57,7 +56,7 @@ public class RecenteSearchAdapter extends RecyclerView.Adapter<RecenteSearchAdap
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtSearch = itemView.findViewById(R.id.txtSearch);
+            txtSearch = itemView.findViewById(R.id.tvSearch);
         }
     }
 }

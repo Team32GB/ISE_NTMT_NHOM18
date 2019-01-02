@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             app:titleTextColor="@color/white">
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSearch"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -41,7 +42,18 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-
+    <TextView
+        android:id="@+id/nothing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Không tìm thấy công việc phù hợp"
+        android:layout_gravity="center"
+        android:paddingTop="8dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:background="@color/colorPrimaryMinLight"
+        android:visibility="gone"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListJobSearch"
         android:layout_width="match_parent"
