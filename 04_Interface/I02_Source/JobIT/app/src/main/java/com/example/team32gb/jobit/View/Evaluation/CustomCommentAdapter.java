@@ -15,16 +15,16 @@ import java.util.ArrayList;
 
 public class CustomCommentAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<Comment> arr;
+    private ArrayList<RatingModel> arr;
 
-    public CustomCommentAdapter(Context context, ArrayList<Comment> arr) {
+    public CustomCommentAdapter(Context context, ArrayList<RatingModel> arr) {
         this.context = context;
         this.arr = arr;
     }
 
     @Override
     public int getCount() {
-        if(arr==null)
+        if (arr == null)
             return 0;
         else
             return arr.size();
@@ -42,17 +42,17 @@ public class CustomCommentAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater=((Activity)context).getLayoutInflater();
-        View tag=inflater.inflate(R.layout.tag_comment,null);
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        View tag = inflater.inflate(R.layout.tag_comment, null);
 
-        TextView title=tag.findViewById(R.id.txtCmtTitle);
-        RatingBar ratingBar=tag.findViewById(R.id.rbComment);
-        TextView date=tag.findViewById(R.id.txtCmtDate);
-        TextView cmt=tag.findViewById(R.id.txtComment);
+        TextView title = tag.findViewById(R.id.txtCmtTitle);
+        RatingBar ratingBar = tag.findViewById(R.id.rbComment);
+        TextView date = tag.findViewById(R.id.txtCmtDate);
+        TextView cmt = tag.findViewById(R.id.txtComment);
 
         title.setText(arr.get(position).getTitle());
-        ratingBar.setRating(arr.get(position).getStar());
-        date.setText(arr.get(position).getDate());
+        ratingBar.setRating(Float.parseFloat(Double.toString(arr.get(position).getRatingAverage())));
+        date.setText(arr.get(position).getDateTime());
         cmt.setText(arr.get(position).getComment());
 
         return tag;

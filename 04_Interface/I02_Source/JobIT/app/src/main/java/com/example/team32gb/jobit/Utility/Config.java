@@ -15,6 +15,8 @@ public class Config {
     public static final String REF_INFO_COMPANY_WAITING_APPROVAL = "companysWaitingAdminApproval";
     public static final String REF_REPORT_WAITING_ADMIN_APPROVAL ="reportWaitingAdminApproval";
     public static final String REF_REPORT ="reports";
+    public static final String REF_RATING = "rating";
+    public static final String REF_LIST_RATING = "listRating";
 
     //Dữ liệu offline
     public static final String SHARED_PREFERENCES_NAME = "team32gb";

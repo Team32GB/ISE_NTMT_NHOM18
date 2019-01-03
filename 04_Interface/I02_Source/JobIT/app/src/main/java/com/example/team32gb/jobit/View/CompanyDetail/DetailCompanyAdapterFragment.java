@@ -1,11 +1,9 @@
 package com.example.team32gb.jobit.View.CompanyDetail;
 
 import android.content.Context;
+import android.os.Bundle;
 
-import com.example.team32gb.jobit.View.Admin.AdminReportFragmentTab1;
-import com.example.team32gb.jobit.View.Admin.AdminReportFragmentTab2;
 import com.example.team32gb.jobit.View.Evaluation.FragmentRating;
-import com.example.team32gb.jobit.View.Evaluation.MainActivity;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,7 +34,9 @@ public class DetailCompanyAdapterFragment extends FragmentPagerAdapter {
                 return fm;
             case TAB2_RATING:
                 FragmentRating fm2= new FragmentRating();
-//                fm2.setContext(context);
+                Bundle bundle = new Bundle();
+                bundle.putString("idCompany",idCompany);
+                fm2.setArguments(bundle);
                 return fm2;
             default:
                 return null;

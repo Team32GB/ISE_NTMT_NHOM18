@@ -48,4 +48,9 @@ public class DetailCompanyFragment extends Fragment implements CompanyDetailActi
         tvType.setText(model.getType());
         tvIntroduce.setText(model.getIntroduce());
     }
+
+    @Override
+    public void onDataRatingReceived(String id) {
+
+    }
 }

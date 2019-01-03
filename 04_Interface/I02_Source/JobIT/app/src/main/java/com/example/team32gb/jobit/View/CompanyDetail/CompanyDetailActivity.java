@@ -63,6 +63,7 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
 
     public interface OnAboutDataReceivedListener {
         void onDataReceived(InfoCompanyModel model);
+        void onDataRatingReceived(String id);
     }
 
     public void setAboutDataListener(OnAboutDataReceivedListener listener) {
@@ -108,6 +109,8 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         imageButton.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -121,9 +124,8 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
         } else {
             final Intent intent = getIntent();
             idCompany = intent.getStringExtra("idCompany");
-
         }
-
+        //mAboutDataListener.onDataRatingReceived(idCompany);
         DetailCompanyAdapterFragment adapter = new DetailCompanyAdapterFragment(this, getSupportFragmentManager(),idCompany);
         vpReport.setAdapter(adapter);
         tlReport.setupWithViewPager(vpReport);

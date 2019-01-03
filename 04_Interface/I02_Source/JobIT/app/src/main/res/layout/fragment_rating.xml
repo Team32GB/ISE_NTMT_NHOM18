@@ -9,6 +9,21 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp">
+
+        <Button
+            android:id="@+id/btnAddReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Thêm đánh giá" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -16,12 +31,11 @@
             android:orientation="vertical"
             android:padding="16dp"
             >
-            <RatingBar
-                android:id="@+id/AverageRatingBar"
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/rbAverage"
                 style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:isIndicator="false"
                 android:progressBackgroundTint="@color/colorPrimaryLight"
                 android:progressTint="@color/colorSecondary"
                 android:rating="2"
@@ -60,13 +74,13 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb1"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
                     android:layout_toStartOf="@id/tvStar1"
-                    android:isIndicator="false"
                     android:progressBackgroundTint="@color/colorPrimaryLight"
                     android:progressTint="@color/colorSecondary"
                     android:rating="5"
@@ -80,6 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="0dp"
                     android:text="5.0"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -100,6 +115,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb2"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,8 +125,8 @@
                     android:progressBackgroundTint="@color/colorPrimaryLight"
                     android:progressTint="@color/colorSecondary"
                     android:rating="5"
-                    android:scaleX="1.5"
 
+                    android:scaleX="1.5"
                     android:scaleY="1.5"
                     android:stepSize="0.1" />
 
@@ -140,6 +156,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb3"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -181,6 +198,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb4"
                     style="@style/Base.Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -207,21 +225,6 @@
 
             </RelativeLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-     android:layout_marginTop="4dp"
-        >
-        <Button
-            android:id="@+id/btnAddReview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_gravity="center"
-            android:text="Thêm đánh giá" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
