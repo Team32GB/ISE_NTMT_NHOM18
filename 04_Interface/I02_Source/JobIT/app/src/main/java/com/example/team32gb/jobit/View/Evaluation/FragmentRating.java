@@ -20,6 +20,7 @@ import com.example.team32gb.jobit.Model.SignUpAccountBusiness.InfoCompanyModel;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
 import com.example.team32gb.jobit.Utility.Util;
+import com.example.team32gb.jobit.View.Admin.AdminReportModel;
 import com.example.team32gb.jobit.View.CompanyDetail.CompanyDetailActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,6 +57,7 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
     private int typeUser;
     private boolean isLogged;
     private ArrayList<RatingModel> ratingModels = new ArrayList<>();
+    private ArrayList<String> listId = new ArrayList<>();
     private RatingModel myRating = null;
 
     @Override
@@ -85,12 +87,12 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_rating, container, false);
-        if (typeUser != Config.IS_JOB_SEEKER) {
-            btnAddRating.setVisibility(View.GONE);
-        }
 
         lstRatingMem = v.findViewById(R.id.lstRatingMem);
         btnAddRating = v.findViewById(R.id.btnAddReview);
+        if (typeUser != Config.IS_JOB_SEEKER) {
+            btnAddRating.setVisibility(View.GONE);
+        }
 
         rbAverage = v.findViewById(R.id.rbAverage);
         rb1 = v.findViewById(R.id.rb1);
@@ -123,15 +125,17 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
                     for (DataSnapshot rating : dataSnapshot.getChildren()) {
                         if (Objects.equals(rating.getKey(), uid)) {
                             myRating = rating.getValue(RatingModel.class);
+                            btnAddRating.setText("Sửa đánh giá");
                         } else {
                             ratingModel = rating.getValue(RatingModel.class);
                             sumRating(ratingModel);
                             ratingModels.add(ratingModel);
-
+                            listId.add(rating.getKey());
                         }
                     }
                     if (myRating != null) {
                         ratingModels.add(0, myRating);
+                        listId.add(0, uid);
                         sumRating(myRating);
                     }
 
@@ -160,7 +164,7 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
                     tvstart4.setText(String.valueOf(ratingCompany4));
                     //Log.e("kiemtraRating",ratingAverage + ":" + size + ":" + ratingTotalAverage);
 
-                    CustomCommentAdapter customCommentAdapter = new CustomCommentAdapter(context, ratingModels);
+                    CustomCommentAdapter customCommentAdapter = new CustomCommentAdapter(context, ratingModels,mCommunication);
                     lstComment.setAdapter(customCommentAdapter);
                     setListViewHeightBasedOnChildren(lstComment);
                 }
@@ -181,7 +185,7 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
         ratingTotal4 += ratingModel.getRating4();
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
+    private static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) return;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
@@ -369,5 +373,44 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
         dialog.setTitle("Đánh giá nhà tuyển dụng");
         dialog.show();
     }
+    private void setUpDialogReport(final int position) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.custom_dialog_tocao, null);
+        final EditText edtComment = dialogView.findViewById(R.id.edtComment);
+        Button btnOk = dialogView.findViewById(R.id.btnOk);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
 
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AdminReportModel reportModel = new AdminReportModel();
+                reportModel.setDecription(edtComment.getText().toString());
+                reportModel.setDateTime(Util.getCurrentDay());
+                reportModel.setIdAccused(listId.get(position));
+                reportModel.setIdReporter(uid);
+                reportModel.setNameAccused("");
+                reportModel.setNameReporter("");
+                reportModel.setEmployee(false);
+
+
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setContentView(dialogView);
+        dialog.setTitle("Tố cáo");
+        dialog.show();
+    }
+
+    FragmentCommunication mCommunication = new FragmentCommunication() {
+        @Override
+        public void respond(int position) {
+            Log.e("kiemtraTocao", position + ":" + listId.get(position));
+            setUpDialogReport(position);
+        }
+    };
 }
