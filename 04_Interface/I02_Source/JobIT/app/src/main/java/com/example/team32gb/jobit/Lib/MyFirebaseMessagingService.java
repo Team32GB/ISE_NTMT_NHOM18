@@ -19,6 +19,9 @@ import com.example.team32gb.jobit.Test.TestDuyet;
 import com.example.team32gb.jobit.View.Admin.AdminShowDetailReportJobseekerActivity;
 import com.example.team32gb.jobit.View.Admin.AdminShowDetailReportRecruiterActivity;
 import com.example.team32gb.jobit.View.Admin.ShowDetailCompanyApprovalActivity;
+import com.example.team32gb.jobit.View.Applied.AppliedActivity;
+import com.example.team32gb.jobit.View.InviteJob.InviteJobActivity;
+import com.example.team32gb.jobit.View.WaitingForInterview.InterviewActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -48,10 +51,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String nameJob = dataMap.get("nameJob");
                 String timeJob = dataMap.get("timeJob");
                 Log.e("kiemtraFCM", idCompany + " : " + idJob + " : " + nameJob + " : " + timeJob);
-                bundle.putString("idCompany", dataMap.get("idCompany"));
-                bundle.putString("idJob", dataMap.get("idJob"));
-                bundle.putString("nameJob", dataMap.get("nameJob"));
-                bundle.putString("timeJob", dataMap.get("timeJob"));
+                bundle.putString("idCompany", idCompany);
+                bundle.putString("idJob", idJob);
+                bundle.putString("nameJob", nameJob);
+                bundle.putString("timeJob", timeJob);
             }
             else if (type.equals("thongBaoAdminToCaoRecruiterMoi") || type.equals("thongBaoAdminToCaoJobSeekerMoi")){
                 String idreport = dataMap.get(ID_REPORT_KEY);
@@ -66,6 +69,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 bundle.putString(ID_COMPANY_KEY, dataMap.get(ID_COMPANY_KEY));
                 bundle.putString(DATE_SEND_KEY, dataMap.get(DATE_SEND_KEY));
                 Log.e("Thong bao admin", "Thong bao admin co ho so moi" + dataMap.get(ID_COMPANY_KEY)+"date: "+ dataMap.get(DATE_SEND_KEY));
+            } else if(type.equals("thongBaoMoiPhongVan")) {
+                String idCompany = dataMap.get("idCompany");
+                String idJob = dataMap.get("idJob");
+                String nameJob = dataMap.get("nameJob");
+                String timeJob = dataMap.get("timeJob");
+                String nameCompany = dataMap.get("nameCompany");
+                Log.e("kiemtraFCM", idCompany + " : " + idJob + " : " + nameJob + " : " + timeJob);
+                bundle.putString("idCompany", idCompany);
+                bundle.putString("idJob", idJob);
+                bundle.putString("nameJob", nameJob);
+                bundle.putString("timeJob", timeJob);
+                bundle.putString("nameCompany",nameCompany);
             }
 
 
@@ -105,6 +120,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent = new Intent(this, ShowDetailCompanyApprovalActivity.class);
             intent.putExtra("bundle", bundle);
             Log.e("Thong bao admin", "Admin nhay activity show detail approval");
+        }
+        else if(type.equals("thongBaoMoiPhongVan")) {
+            intent = new Intent(this, InterviewActivity.class);
+            intent.putExtra("bundle", bundle);
+        }
+        else if(type.equals("thongBaoMoiLam")) {
+            intent = new Intent(this, InviteJobActivity.class);
+            //intent.putExtra("bundle", bundle);
+        }
+        else if(type.equals("loaiPhongVan")) {
+            intent = new Intent(this, AppliedActivity.class);
+            //intent.putExtra("bundle", bundle);
         }
         else {
             intent = new Intent(this, TestDuyet.class);

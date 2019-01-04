@@ -11,10 +11,22 @@ public class ItemPostJob implements Parcelable{
     DataPostJob dataPostJob;
     boolean checked;
     boolean applied;
+    boolean isEliminated;
+
+    public boolean isEliminated() {
+        return isEliminated;
+    }
+
+    public void setEliminated(boolean eliminated) {
+        isEliminated = eliminated;
+    }
+
+
 
     public ItemPostJob() {
         checked = false;
         applied = false;
+        isEliminated = false;
     }
 
 

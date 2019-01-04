@@ -111,6 +111,28 @@ public class ViewAdapterApplied extends RecyclerView.Adapter<ViewAdapterApplied.
                 context.startActivity(intent);
             }
         });
+        myViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference nodeRoot = FirebaseDatabase.getInstance().getReference();
+                String idCompany = mData.get(i).getIdCompany();
+                String idJob = mData.get(i).getIdJob();
+                String idJobSeeker = mData.get(i).getIdJobSeeker();
+                String time = mData.get(i).getDayApplied();
+
+                DatabaseReference drDaNop = nodeRoot.child("choDuyets").child(idCompany).child(idJob).child(idJobSeeker);
+                drDaNop.removeValue();
+
+                DatabaseReference drChoPV = nodeRoot.child("loaiPhongVans").child(idJobSeeker).child(idCompany).child(idJob).child("timeApplied");
+                drChoPV.setValue(time);
+
+                mData.remove(i);
+                notifyItemRemoved(i);
+                notifyItemRangeChanged(i, getItemCount());
+
+                Toast.makeText(context, "Loại thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

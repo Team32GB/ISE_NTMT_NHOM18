@@ -1,95 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:algolia="http://schemas.android.com/apk/res-auto">
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/item_listjob"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginStart="8dp"
-    app:cardElevation="2dp"
-    android:layout_marginEnd="8dp">
 
-    <RelativeLayout
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/item_listjob"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-    <ImageView
-        android:id="@+id/imgAvatarCompany"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:scaleType="fitXY"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/avatar_company"
-        android:layout_centerVertical="true"
-        android:layout_margin="16dp"
-        android:layout_alignParentTop="true"/>
-
-
-    <TextView
-        android:id="@+id/txtTenCV"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/imgAvatarCompany"
-        android:layout_toStartOf="@+id/cbFav"
-        android:text="Tên công việc"
-        android:textSize="15dp"
-        attribute='@{"nameJob"}'
-        highlighted='@{true}'
-        android:layout_marginTop="12dp"
-        android:maxLines="2"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="2dp">
 
-        android:textStyle="bold" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/txtTenCT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtTenCV"
-        android:layout_alignStart="@+id/txtTenCV"
-        android:layout_toStartOf="@+id/cbFav"
-        android:text="Tên công ty"
-        android:maxLines="1"
-        android:textSize="13dp" />
 
-    <TextView
-        android:id="@+id/txtSalary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtTenCT"
-        android:layout_alignStart="@+id/txtTenCV"
-        android:text="Từ $1000 đến $2000"
-        android:textColor="#fd860f"
-        android:textSize="13sp" />
-        <TextView
-            android:id="@+id/txtProvince"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txtSalary"
-            android:layout_alignStart="@+id/txtTenCV"
-            android:text="Hồ Chí Minh"
-            android:textSize="10dp" />
-    <TextView
-        android:id="@+id/txtThơiGian"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtProvince"
-        android:layout_marginTop="4dp"
-        android:layout_alignStart="@+id/txtTenCV"
-        android:text="Thời gian đăng việc"
-        android:textSize="10dp" />
+            <ImageView
+                android:id="@+id/imgAvatarCompany"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="16dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/avatar_company" />
 
-    <CheckBox
-        android:id="@+id/cbFav"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:checked="false"
-        android:button="@drawable/custom_checkbox_saved"
-        />
-    </RelativeLayout>
-</com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/txtTenCV"
+                attribute='@{"nameJob"}'
+                highlighted='@{true}'
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_toStartOf="@+id/cbFav"
+                android:layout_toEndOf="@id/imgAvatarCompany"
+                android:maxLines="2"
+                android:text="Tên công việc"
+                android:textSize="15dp"
+
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtTenCT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTenCV"
+                android:layout_alignStart="@+id/txtTenCV"
+                android:layout_toStartOf="@+id/cbFav"
+                android:maxLines="1"
+                android:text="Tên công ty"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/txtSalary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTenCT"
+                android:layout_alignStart="@+id/txtTenCV"
+                android:text="Từ $1000 đến $2000"
+                android:textColor="#fd860f"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/txtProvince"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtSalary"
+                android:layout_alignStart="@+id/txtTenCV"
+                android:text="Hồ Chí Minh"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/txtThơiGian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtProvince"
+                android:layout_alignStart="@+id/txtTenCV"
+                android:layout_marginTop="4dp"
+                android:text="Thời gian đăng việc"
+                android:textSize="10dp" />
+
+            <CheckBox
+                android:id="@+id/cbFav"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="16dp"
+                android:button="@drawable/custom_checkbox_saved"
+                android:checked="false" />
+
+            <TextView
+                android:id="@+id/tvBiLoai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/txtThơiGian"
+                android:layout_alignParentEnd="true"
+                android:text="ĐÃ BỊ LOẠI"
+                android:layout_marginEnd="8dp"
+                android:textColor="#ff0000"
+                android:visibility="gone"/>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

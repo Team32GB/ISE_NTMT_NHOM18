@@ -2,12 +2,15 @@ package com.example.team32gb.jobit.View.RecentSearch;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.team32gb.jobit.R;
+import com.example.team32gb.jobit.View.ListJobSearch.ListJobSearchActivity;
 
 import java.util.List;
 
@@ -38,6 +41,19 @@ public class RecenteSearchAdapter extends RecyclerView.Adapter<RecenteSearchAdap
         StringBuilder strSearch = new StringBuilder();
         String timkiem = searches.get(position).getTimkiem();
         String diadiem = searches.get(position).getDiaDiem();
+
+        final Bundle bundle = new Bundle();
+        bundle.putString("timKiem",timkiem);
+        bundle.putString("diaDiem",diadiem);
+
+        holder.txtSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,ListJobSearchActivity.class);
+                intent.putExtra("bundle",bundle);
+                context.startActivity(intent);
+            }
+        });
 
         strSearch.append(timkiem);
         if(!diadiem.isEmpty()){

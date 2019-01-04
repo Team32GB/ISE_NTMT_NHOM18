@@ -16,6 +16,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.team32gb.jobit.Model.Report.ReportJobseekerModel;
+import com.example.team32gb.jobit.Model.Report.ReportWaitingAdminApprovalModel;
 import com.example.team32gb.jobit.Model.SignUpAccountBusiness.InfoCompanyModel;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
@@ -382,15 +384,34 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AdminReportModel reportModel = new AdminReportModel();
+                ReportJobseekerModel reportModel = new ReportJobseekerModel();
                 reportModel.setDecription(edtComment.getText().toString());
-                reportModel.setDateTime(Util.getCurrentDay());
+                reportModel.setDateSendReport(Util.getCurrentDay());
                 reportModel.setIdAccused(listId.get(position));
                 reportModel.setIdReporter(uid);
-                reportModel.setNameAccused("");
-                reportModel.setNameReporter("");
-                reportModel.setEmployee(false);
+                reportModel.setAdminComment("");
+                reportModel.setisWarned(false);
+                reportModel.setIdCommentInvalid(idCompany);
 
+
+                DatabaseReference df = FirebaseDatabase.getInstance().getReference().child(Config.REF_REPORT).child("jobseekers").child(reportModel.getIdAccused());
+                String idReport = df.push().getKey();
+
+                ReportWaitingAdminApprovalModel adminApprovalModel = new ReportWaitingAdminApprovalModel();
+                adminApprovalModel.setDateSendReport(reportModel.getDateSendReport());
+                adminApprovalModel.setIdAccused(reportModel.getIdAccused());
+                adminApprovalModel.setIdReport(idReport);
+
+                DatabaseReference dfAdminApproval = FirebaseDatabase.getInstance().getReference().child(Config.REF_REPORT_WAITING_ADMIN_APPROVAL).child("jobseekers").child(idReport);
+                dfAdminApproval.setValue(adminApprovalModel);
+
+                df = df.child(idReport);
+                df.setValue(reportModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(context, "Tố cáo thành công", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });

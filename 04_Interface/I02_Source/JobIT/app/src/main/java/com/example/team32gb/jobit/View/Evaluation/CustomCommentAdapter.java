@@ -60,17 +60,16 @@ public class CustomCommentAdapter extends BaseAdapter {
         TextView date = tag.findViewById(R.id.txtCmtDate);
         TextView cmt = tag.findViewById(R.id.txtComment);
         final ImageButton btnMore = tag.findViewById(R.id.btnMore);
+        if(FirebaseAuth.getInstance().getUid() == null) {
+            btnMore.setVisibility(View.GONE);
+        }
 
         btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(FirebaseAuth.getInstance().getUid() != null) {
                     if(v.getId() == R.id.btnMore){
                         showMenu(btnMore,position);
                     }
-                } else {
-                    Util.jumpActivity(context,SignInActivity.class);
-                }
             }
         });
 

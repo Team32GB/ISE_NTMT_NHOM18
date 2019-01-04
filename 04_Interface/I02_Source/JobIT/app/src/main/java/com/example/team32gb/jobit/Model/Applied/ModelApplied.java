@@ -58,6 +58,19 @@ public class ModelApplied {
                         itemPostJobs.add(itemPostJob);
                     }
                 }
+
+                DataSnapshot dfLoai = dataSnapshot.child("loaiPhongVans").child(uid);
+                for (DataSnapshot snapshotCompany : dfLoai.getChildren()) {
+                    for (DataSnapshot snJob : snapshotCompany.getChildren()) {
+                        for (int i = 0; i < itemPostJobs.size(); i++) {
+                            if (itemPostJobs.get(i).getIdJob().equals(snJob.getKey())) {
+                                itemPostJobs.get(i).setEliminated(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 eventBus.post(itemPostJobs);
             }
 
