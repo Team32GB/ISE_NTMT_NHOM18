@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.Model.PostJob.ItemPostJob;
 import com.example.team32gb.jobit.Utility.Config;
@@ -36,6 +37,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
+
+import static com.example.team32gb.jobit.Utility.Config.IS_ACTIVE;
+import static com.example.team32gb.jobit.Utility.Config.REF_RECRUITERS_NODE;
 
 public class ListJobViewAdapter extends RecyclerView.Adapter<ListJobViewAdapter.MyViewHolder> {
 
@@ -113,11 +117,32 @@ public class ListJobViewAdapter extends RecyclerView.Adapter<ListJobViewAdapter.
         myViewHolder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Intent intent = new Intent(context.getApplicationContext(), DetailJobActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                Log.e("kiemtraanh",mdata.get(i).getDataPostJob().getIdCompany());
-                intent.putExtra("bundle", mdata.get(i));
-                context.getApplicationContext().startActivity(intent);
+                //Kiểm tra xem account của company có tồn tại hay không trước khi xem chi tiết tin tuyển dụng của company này
+                String idCompany = mdata.get(i).getDataPostJob().getIdCompany();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(REF_RECRUITERS_NODE).child(idCompany).child(IS_ACTIVE);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        boolean isCompanyActive = (boolean) dataSnapshot.getValue();
+                        if (isCompanyActive){ //Nếu tài khoản còn tồn tại
+                            Intent intent = new Intent(context.getApplicationContext(), DetailJobActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                            Log.e("kiemtraanh",mdata.get(i).getDataPostJob().getIdCompany());
+                            intent.putExtra("bundle", mdata.get(i));
+                            context.getApplicationContext().startActivity(intent);
+                        }
+                        else{ //Nếu không tồn tại
+                            Toast.makeText(context, "Tài khoản của công ty này đã bị khóa, bạn không thể xem chi tiết", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
         });
 

@@ -57,6 +57,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private ActionBar acitonBar;
+    String idReport, date, idAccused; //lấy từ bundle
 
 
     @Override
@@ -87,7 +88,6 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("bundle");
-        String idReport, date, idAccused;
         if (bundle!=null) {
             idReport = bundle.getString(ID_REPORT_KEY);
             date = bundle.getString(DATE_SEND_KEY);
@@ -102,7 +102,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                     model = new ReportJobseekerModel();
                     model = dataSnapshot.getValue(ReportJobseekerModel.class); //Lấy model report
 
-                    //todo: đưa bình luận vi phạm lên
+                    //todo: đưa bình luận vi phạm lên???
                     txtDetailReportCommentInvalid.setText(model.getIdCommentInvalid());
                     txtDetailReportDecripton.setText(model.getDecription());
 
@@ -177,6 +177,9 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                 .inflate(R.layout.admin_show_history_report, rootView, false);
 
         Button btnCloseHistory = viewHistory.findViewById(R.id.btnCloseHistoryReport);
+        Button btnUnactiveUser = viewHistory.findViewById(R.id.btnUnactiveUser);
+        final int[] timesReported = {0}; //số lần bị tố cáo
+
         final TextView txtHistoryReport = viewHistory.findViewById(R.id.txtHistoryReport);
         dialogShowHistory.setContentView(viewHistory);
 
@@ -203,6 +206,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                 }
                 builder.append("\n\nTổng số lần bị tố cáo: "+count+"\n\n");
                 txtHistoryReport.setText(builder.toString());
+                timesReported[0] = count;
             }
 
             @Override
@@ -217,10 +221,66 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                 dialogShowHistory.dismiss();
             }
         });
+        btnUnactiveUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogShowHistory.dismiss();
+                if (timesReported[0] <= 3) {
+                    Toast.makeText(AdminShowDetailReportJobseekerActivity.this, "Số lần bị tố cáo chưa quá 3 lần nên không thể khóa tài khoản", Toast.LENGTH_SHORT).show();
+                } else {
+                    onUnactiveUserJobseeker();
+                }
+            }
+        });
 
         dialogShowHistory.show();
     }
 
+    /*Unactive user*/
+    public void onUnactiveUserJobseeker(){
+        /*hiển thị dialog xác nhận*/
+        ViewGroup rootView = (ViewGroup) ((ViewGroup) this
+                .findViewById(android.R.id.content)).getChildAt(0);
+        View view = LayoutInflater.from(this)
+                .inflate(R.layout.admin_dialog_unactive_user, rootView, false);
+        Button btnAcceptUnactiveUser = view.findViewById(R.id.btnAcceptUnactiveUser);
+        Button btnCancelUnactiveUser = view.findViewById(R.id.btnCancelUnactiveUser);
+
+        final Dialog dialog = new Dialog(AdminShowDetailReportJobseekerActivity.this);
+        dialog.setContentView(view);
+        dialog.show();
+
+        btnAcceptUnactiveUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child(REF_JOBSEEKERS_NODE);
+                    /*cho isActive của người bị tố cáo = flase */
+                    refUser.child(idAccused).child("isActive").setValue(false);
+                    Toast.makeText(AdminShowDetailReportJobseekerActivity.this, "Khóa tài khoản thành công", Toast.LENGTH_SHORT).show();
+                    /*Xóa hồ sơ tố cáo của người này*/
+                    presenter.onIgnoreReportJobseeker(modelReportWaiting);
+                } catch (Exception e) {
+                    Toast.makeText(AdminShowDetailReportJobseekerActivity.this, "Khóa tài khoản thất bại", Toast.LENGTH_SHORT).show();
+                }
+                finally {
+                    dialog.dismiss();
+
+                    Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportFragmentTab1.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+
+        btnCancelUnactiveUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
 
     public void setUpDialogSendWarning() {
         final EditText edtMessageFromAdmin;

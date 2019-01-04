@@ -52,14 +52,33 @@
                 android:textColor="#111"/>
         </ScrollView>
 
-        <Button
-            android:id="@+id/btnCloseHistoryReport"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Đóng"
-            android:layout_marginBottom="20dp"/>
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <Button
+                android:id="@+id/btnUnactiveUser"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Khóa tài khoản"
+                android:layout_marginBottom="20dp"
+                android:layout_marginHorizontal="10dp"/>
+            <Button
+                android:id="@+id/btnCloseHistoryReport"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Đóng"
+                android:layout_marginBottom="20dp"
+                android:layout_marginHorizontal="10dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

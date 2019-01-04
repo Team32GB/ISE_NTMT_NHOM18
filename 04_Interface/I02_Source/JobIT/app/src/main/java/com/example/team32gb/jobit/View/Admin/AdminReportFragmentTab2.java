@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.Model.Report.ReportWaitingAdminApprovalModel;
 import com.example.team32gb.jobit.Presenter.AdminApproval.PresenterAdminApprovalReport;
@@ -19,6 +20,7 @@ import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Util;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.common.internal.Objects;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +36,7 @@ import static com.example.team32gb.jobit.Utility.Config.DATE_SEND_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_ACCUSED_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_REPORT_KEY;
 import static com.example.team32gb.jobit.Utility.Config.REF_INFO_COMPANY;
+import static com.example.team32gb.jobit.Utility.Config.REF_JOBSEEKERS_NODE;
 import static com.example.team32gb.jobit.Utility.Config.REF_RECRUITERS_NODE;
 import static com.example.team32gb.jobit.Utility.Config.REF_REPORT_WAITING_ADMIN_APPROVAL;
 
@@ -48,6 +51,7 @@ public class AdminReportFragmentTab2 extends Fragment {
     private String dateSend;
     private ReportWaitingAdminApprovalModel reportModel;
     private PresenterAdminApprovalReport presenter;
+
 
     public AdminReportFragmentTab2() {
         // Required empty public constructor
@@ -104,15 +108,35 @@ public class AdminReportFragmentTab2 extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         reportModel = getItem(viewHolder.getAdapterPosition());
-                        //todo: jum Activity
-                        //Nhảy qua activity show detail report
-                        Intent intent = new Intent(getActivity(), AdminShowDetailReportRecruiterActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString(ID_REPORT_KEY, reportModel.getIdReport());
-                        bundle.putString(DATE_SEND_KEY, reportModel.getDateSendReport());
-                        bundle.putString(ID_ACCUSED_KEY, reportModel.getIdAccused());
-                        intent.putExtra("bundle", bundle);
-                        startActivity(intent);
+                        //kiểm tra tài khoản này có tồn tại hay không
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().
+                                child(REF_RECRUITERS_NODE).child(reportModel.getIdAccused()).child("isActive");
+                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                boolean isActive = (boolean) dataSnapshot.getValue();
+
+                                if (isActive==true) {
+                                    //todo: jum Activity
+                                    //Nhảy qua activity show detail report
+                                    Intent intent = new Intent(getActivity(), AdminShowDetailReportRecruiterActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(ID_REPORT_KEY, reportModel.getIdReport());
+                                    bundle.putString(DATE_SEND_KEY, reportModel.getDateSendReport());
+                                    bundle.putString(ID_ACCUSED_KEY, reportModel.getIdAccused());
+                                    intent.putExtra("bundle", bundle);
+                                    startActivity(intent);
+                                }
+                                else {
+                                    Toast.makeText(getActivity(), "Tài khoản user này đã bị khóa, không thể xem chi tiết", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
 
@@ -120,7 +144,26 @@ public class AdminReportFragmentTab2 extends Fragment {
                     @Override
                     public void onClick(View v) {
                         reportModel = getItem(viewHolder.getAdapterPosition());
-                        setUpDialogSendWarning(reportModel );
+                        //kiểm tra xem tài khoản user có còn active hay không
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().
+                                child(REF_RECRUITERS_NODE).child(reportModel.getIdAccused()).child("isActive");
+                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                boolean isActive = (boolean) dataSnapshot.getValue();
+                                if (isActive){
+                                    setUpDialogSendWarning(reportModel );
+                                }
+                                else{
+                                    Toast.makeText(getActivity(), "Tài khoản user này đã bị khóa, không thể gửi cảnh cáo", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
                 viewHolder.ibtnIgnoreReportJobSeeker.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +186,7 @@ public class AdminReportFragmentTab2 extends Fragment {
         runLayoutAnimation(rvEmployer);
         return v;
     }
+
     private void runLayoutAnimation(final RecyclerView recyclerView) {
         final Context context = recyclerView.getContext();
         final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_recyclerview_admin);

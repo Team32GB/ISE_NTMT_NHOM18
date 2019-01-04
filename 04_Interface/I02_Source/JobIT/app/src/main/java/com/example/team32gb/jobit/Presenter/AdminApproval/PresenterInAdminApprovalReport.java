@@ -10,5 +10,4 @@ interface PresenterInAdminApprovalReport {
 
     void onSendWarningReportToRecruiter(ReportWaitingAdminApprovalModel model, String messageFromAdmin);
     void onIgnoreReportRecruiter(ReportWaitingAdminApprovalModel model);
-
 }

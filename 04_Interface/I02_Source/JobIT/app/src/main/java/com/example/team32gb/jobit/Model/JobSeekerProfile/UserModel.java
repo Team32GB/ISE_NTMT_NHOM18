@@ -5,6 +5,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class UserModel {
     String name,avatar, uid, email, phoneNumber;
+    boolean isActive;
 
     public UserModel() {
         avatar = "";
@@ -12,6 +13,7 @@ public class UserModel {
         email = "";
         name = "";
         phoneNumber = "";
+        isActive =true;
     }
 
     public String getName() {

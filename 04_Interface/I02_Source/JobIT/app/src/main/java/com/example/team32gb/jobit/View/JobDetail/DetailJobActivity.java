@@ -51,6 +51,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.team32gb.jobit.Utility.Config.IS_ACTIVE;
+import static com.example.team32gb.jobit.Utility.Config.REF_JOBSEEKERS_NODE;
+
 public class DetailJobActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar myToolBar;
     private ActionBar actionBar;
@@ -198,31 +201,50 @@ public class DetailJobActivity extends AppCompatActivity implements View.OnClick
             case R.id.btnApply:
                 if (isLogged) {
                     final String idJobseeker = FirebaseAuth.getInstance().getUid();
-                    nodeRoot.child("cvs").addListenerForSingleValueEvent(new ValueEventListener() {
+                    //Kiểm tra xem account của người tìm việc này có active hay không
+                    nodeRoot.child(REF_JOBSEEKERS_NODE).child(idJobseeker).child(IS_ACTIVE).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.hasChild(idJobseeker)) {
-                                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-                                String currentDate = sdf.format(new Date());
+                            boolean isJobseekerActive = (boolean) dataSnapshot.getValue();
+                            Log.e("khóa tài khoản", "isActive: " + isJobseekerActive);
+                            if (!isJobseekerActive){ //Nếu tài khoản bị khóa
+                                Toast.makeText(DetailJobActivity.this, "Tài khoản của bạn đã bị khóa, không thể apply", Toast.LENGTH_SHORT).show();
+                            }
+                            else { //Nếu tài khoản không bị khóa
+                                nodeRoot.child("cvs").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.hasChild(idJobseeker)) {
+                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+                                            String currentDate = sdf.format(new Date());
 
-                                DatabaseReference dfTimeApplied = nodeRoot.child("choDuyets").child(idCompany).child(idJob).child(idJobseeker).child("timeApplied");
-                                dfTimeApplied.setValue(currentDate);
+                                            DatabaseReference dfTimeApplied = nodeRoot.child("choDuyets").child(idCompany).child(idJob).child(idJobseeker).child("timeApplied");
+                                            dfTimeApplied.setValue(currentDate);
 
-                                DatabaseReference dfDaApply = nodeRoot.child("Applieds").child(idJobseeker).child(idCompany).child(idJob).child("timeAppiled");
-                                dfDaApply.setValue(currentDate);
-                                Toast.makeText(DetailJobActivity.this, "Apply thành công", Toast.LENGTH_SHORT).show();
+                                            DatabaseReference dfDaApply = nodeRoot.child("Applieds").child(idJobseeker).child(idCompany).child(idJob).child("timeAppiled");
+                                            dfDaApply.setValue(currentDate);
+                                            Toast.makeText(DetailJobActivity.this, "Apply thành công", Toast.LENGTH_SHORT).show();
 
-                                btnApply.setEnabled(false);
-                                btnApply.setText("Applied");
-                            } else {
-                                Util.jumpActivity(DetailJobActivity.this, CreateCVActivity.class);
+                                            btnApply.setEnabled(false);
+                                            btnApply.setText("Applied");
+                                        } else {
+                                            Util.jumpActivity(DetailJobActivity.this, CreateCVActivity.class);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
+
                         }
                     });
+
                 } else {
                     Util.jumpActivity(DetailJobActivity.this, SignInActivity.class);
                 }

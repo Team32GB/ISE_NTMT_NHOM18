@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.Model.PostJob.ItemPostJob;
 import com.example.team32gb.jobit.R;
@@ -24,12 +25,18 @@ import com.example.team32gb.jobit.View.JobDetail.DetailJobActivity;
 import com.example.team32gb.jobit.View.ListJobSearch.ItemClickListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
+
+import static com.example.team32gb.jobit.Utility.Config.IS_ACTIVE;
+import static com.example.team32gb.jobit.Utility.Config.REF_RECRUITERS_NODE;
 
 public class ListJobInterviewViewAdapter extends RecyclerView.Adapter<ListJobInterviewViewAdapter.MyViewHolder> {
 
@@ -76,10 +83,29 @@ public class ListJobInterviewViewAdapter extends RecyclerView.Adapter<ListJobInt
         myViewHolder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Intent intent = new Intent(context.getApplicationContext(), DetailJobActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                intent.putExtra("bundle", mdata.get(i));
-                context.getApplicationContext().startActivity(intent);
+//                //Trước khi xem chi tiết, kiểm tra xem account company có active hay không
+                String idCompany = mdata.get(i).getDataPostJob().getIdCompany();
+                Log.e("kiem tra acvite", "id company: "+ idCompany);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(REF_RECRUITERS_NODE).child(idCompany).child(IS_ACTIVE);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        boolean isCompanyActive = (boolean) dataSnapshot.getValue();
+                        Log.e("Unactive user", "active: " + isCompanyActive);
+                        if (isCompanyActive) {
+                            Intent intent = new Intent(context.getApplicationContext(), DetailJobActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                            intent.putExtra("bundle", mdata.get(i));
+                            context.getApplicationContext().startActivity(intent);
+                        } else {
+                            Toast.makeText(context, "Tài khoản của công ty này đã bị khóa, bạn không thể xem chi tiết", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
