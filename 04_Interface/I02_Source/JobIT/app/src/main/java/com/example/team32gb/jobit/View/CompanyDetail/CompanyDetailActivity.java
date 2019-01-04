@@ -1,5 +1,6 @@
 package com.example.team32gb.jobit.View.CompanyDetail;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
@@ -17,11 +19,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +37,7 @@ import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
 import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.Admin.AdminHomeActivity;
-import com.example.team32gb.jobit.View.Admin.AdminReportAdapterFragment;
+import com.example.team32gb.jobit.View.Admin.AdminReportModel;
 import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.SignUpAccountBusiness.SignUpAccountBusiness;
@@ -59,10 +64,13 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
     private ProgressDialog progressDialog;
     private String idCompany;
     private int userType;
+    private ImageButton btnMore;
     private OnAboutDataReceivedListener mAboutDataListener;
+    private Dialog dialog;
 
     public interface OnAboutDataReceivedListener {
         void onDataReceived(InfoCompanyModel model);
+
         void onDataRatingReceived(String id);
     }
 
@@ -100,6 +108,7 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
         tlReport = findViewById(R.id.tlReport);
         vpReport = findViewById(R.id.vpReport);
 
+        btnMore = findViewById(R.id.btnMore);
 
 
         myToolBar.setTitle("Thông tin công ty");
@@ -109,8 +118,8 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         imageButton.setOnClickListener(this);
-
-
+        btnMore.setOnClickListener(this);
+        dialog = new Dialog(this);
     }
 
     @Override
@@ -121,12 +130,13 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
         if (userType == Config.IS_RECRUITER) {
             idCompany = FirebaseAuth.getInstance().getUid();
             lnEdit.setVisibility(View.VISIBLE);
+            btnMore.setVisibility(View.GONE);
         } else {
             final Intent intent = getIntent();
             idCompany = intent.getStringExtra("idCompany");
         }
         //mAboutDataListener.onDataRatingReceived(idCompany);
-        DetailCompanyAdapterFragment adapter = new DetailCompanyAdapterFragment(this, getSupportFragmentManager(),idCompany);
+        DetailCompanyAdapterFragment adapter = new DetailCompanyAdapterFragment(this, getSupportFragmentManager(), idCompany);
         vpReport.setAdapter(adapter);
         tlReport.setupWithViewPager(vpReport);
 
@@ -168,12 +178,12 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
                 onBackPressed();
                 break;
             case R.id.tbHome:
-                if(userType == Config.IS_JOB_SEEKER) {
-                    Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
-                } else if(userType == Config.IS_RECRUITER) {
-                    Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+                if (userType == Config.IS_JOB_SEEKER) {
+                    Util.jumpActivityRemoveStack(this, HomeJobSeekerActivity.class);
+                } else if (userType == Config.IS_RECRUITER) {
+                    Util.jumpActivityRemoveStack(this, HomeRecruitmentActivity.class);
                 } else {
-                    Util.jumpActivityRemoveStack(this,AdminHomeActivity.class);
+                    Util.jumpActivityRemoveStack(this, AdminHomeActivity.class);
                 }
                 break;
         }
@@ -187,7 +197,28 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
         switch (id) {
             case R.id.imgAvatarCompanyDetail:
                 break;
+            case R.id.btnMore:
+                showMenu(v);
+                break;
         }
+    }
+
+    public void showMenu(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (FirebaseAuth.getInstance().getUid() != null) {
+                    if (item.getItemId() == R.id.btnReport) {
+                        setUpDialogReport();
+                    }
+                }
+                return true;
+            }
+        });// to implement on click event on items of menu
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.button_menu, popup.getMenu());
+        popup.show();
     }
 
     private void showInfo() {
@@ -227,5 +258,30 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
 
             }
         });
+    }
+
+    private void setUpDialogReport() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_tocao, null);
+        final EditText edtComment = dialogView.findViewById(R.id.edtComment);
+        Button btnOk = dialogView.findViewById(R.id.btnOk);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CompanyDetailActivity.this, "Tố cáo", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setContentView(dialogView);
+        dialog.setTitle("Tố cáo");
+        dialog.show();
     }
 }

@@ -54,12 +54,23 @@
                         android:layout_alignParentTop="true"
                         android:background="@color/colorPrimaryLight" />
 
-                    <View
+                    <LinearLayout
                         android:id="@+id/view1"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@+id/view"
-                        android:background="@drawable/custom_background_detail_job2" />
+                        android:orientation="horizontal"
+                        android:gravity="end|center_vertical"
+                        android:background="@drawable/custom_background_detail_job2" >
+                        <ImageButton
+                            android:id="@id/btnMore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_hamberger"
+                            android:background="#fff"
+                            android:padding="4dp"
+                            />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
