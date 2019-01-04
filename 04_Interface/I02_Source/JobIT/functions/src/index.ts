@@ -261,3 +261,24 @@ exports.thongBaoUngVienApply = functions.database.ref('/choDuyets/{companyId}/{i
                     return admin.messaging().sendToDevice(fcm_token.val(),payload)
         })
     })
+
+    exports.thongBaoBiKhoaTaiKhoan = functions.database.ref('/unActiveUsers/{idUser}')
+    .onCreate(async(snapshot, context) => {
+        const idUser = context.params.idUser
+        console.log('id user: ' + idUser)
+
+        const payload = {
+            notification:{
+                title: 'Tài khoản của bạn đã bị khóa',
+                body: 'Bạn bị tố cáo nhiều lần nên tài khoản đã bị admin khóa',
+                badge: '1',
+                sound: 'default'
+             }
+             }
+
+        return admin.database().ref('/fcm_tokens/' + idUser +'/token').once('value')
+        .then(fcm_token => {
+                console.log('token available : ' + fcm_token.val())
+                    return admin.messaging().sendToDevice(fcm_token.val(),payload)
+        })
+    })

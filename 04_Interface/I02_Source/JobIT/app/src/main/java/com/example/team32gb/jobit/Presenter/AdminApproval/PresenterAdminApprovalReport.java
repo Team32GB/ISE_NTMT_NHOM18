@@ -2,6 +2,7 @@ package com.example.team32gb.jobit.Presenter.AdminApproval;
 
 import com.example.team32gb.jobit.Lib.EventBus;
 import com.example.team32gb.jobit.Model.Report.ReportWaitingAdminApprovalModel;
+import com.example.team32gb.jobit.Model.UnActiveUser.UnactiveUserModel;
 
 public class PresenterAdminApprovalReport implements PresenterInAdminApprovalReport {
     private EventBus eventBus;
@@ -35,4 +36,5 @@ public class PresenterAdminApprovalReport implements PresenterInAdminApprovalRep
     public void onIgnoreReportRecruiter(ReportWaitingAdminApprovalModel model) {
         model.onIgnoreReportRecuiter();
     }
+
 }

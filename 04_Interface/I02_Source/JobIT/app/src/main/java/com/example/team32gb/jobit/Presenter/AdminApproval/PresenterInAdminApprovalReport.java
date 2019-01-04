@@ -1,6 +1,7 @@
 package com.example.team32gb.jobit.Presenter.AdminApproval;
 
 import com.example.team32gb.jobit.Model.Report.ReportWaitingAdminApprovalModel;
+import com.example.team32gb.jobit.Model.UnActiveUser.UnactiveUserModel;
 
 interface PresenterInAdminApprovalReport {
     void onCreate();

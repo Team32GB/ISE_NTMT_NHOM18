@@ -80,7 +80,8 @@
         <activity android:name=".View.Admin.AdminStatisticActivity" />
         <activity android:name=".View.Admin.AdminApprovalActivity" />
         <activity android:name=".View.Admin.AdminReportActivity" />
-        <activity android:name=".View.RecentSearch.RecentSearch"></activity>
+        <activity android:name=".View.RecentSearch.RecentSearch" />
+        <activity android:name=".View.Admin.AdminUnactiveUserActivity"></activity>
     </application>
 
 </manifest>
