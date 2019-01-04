@@ -82,6 +82,29 @@ public class ViewAdapterInterview extends RecyclerView.Adapter<ViewAdapterInterv
                 context.startActivity(intent);
             }
         });
+        myViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("kiemtraLog",mData.get(i).getIdJobSeeker());
+                DatabaseReference nodeRoot = FirebaseDatabase.getInstance().getReference();
+                String idCompany = mData.get(i).getIdCompany();
+                String idJob = mData.get(i).getIdJob();
+                String idJobSeeker = mData.get(i).getIdJobSeeker();
+                String time = mData.get(i).getDayApplied();
+
+                DatabaseReference drChoPV = nodeRoot.child("choPhongVanNTDs").child(idCompany).child(idJob).child(idJobSeeker);
+                drChoPV.removeValue();
+
+                DatabaseReference drMoiLamNTV = nodeRoot.child("loaiMoiLams").child(idJobSeeker).child(idCompany).child(idJob).child("timeApplied");
+                drMoiLamNTV.setValue(time);
+
+                mData.remove(i);
+                notifyItemRemoved(i);
+                notifyItemRangeChanged(i, getItemCount());
+
+                Toast.makeText(context, "Loại thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

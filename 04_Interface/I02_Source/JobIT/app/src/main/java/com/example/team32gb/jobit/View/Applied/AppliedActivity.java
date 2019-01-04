@@ -1,10 +1,13 @@
 package com.example.team32gb.jobit.View.Applied;
 
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +19,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.team32gb.jobit.Adapter.SwipeController;
+import com.example.team32gb.jobit.Adapter.SwipeControllerActions;
 import com.example.team32gb.jobit.Model.Applied.ItemJobApplied;
 import com.example.team32gb.jobit.Model.ListJobSearch.DataJob;
 import com.example.team32gb.jobit.Model.PostJob.ItemPostJob;
@@ -25,7 +30,10 @@ import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
 import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
+import com.example.team32gb.jobit.View.SavedJob.SavedJobActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -93,9 +101,50 @@ public class AppliedActivity extends AppCompatActivity implements ViewListJobApp
     }
 
     @Override
-    public void showListJob(List<ItemPostJob> itemPostJobs) {
+    public void showListJob(final List<ItemPostJob> itemPostJobs) {
         Log.e("kiemtraaaplied","Heeeeellllooo");
-        ListJobAppliedViewAdapter adapter = new ListJobAppliedViewAdapter(this,itemPostJobs);
+        final ListJobAppliedViewAdapter adapter = new ListJobAppliedViewAdapter(this,itemPostJobs);
+        SwipeControllerActions swipeControllerActions = new SwipeControllerActions() {
+            @Override
+            public void onLeftClicked(int position) {
+                super.onLeftClicked(position);
+            }
+
+            @Override
+            public void onRightClicked(int position) {
+                super.onRightClicked(position);
+                DatabaseReference nodeRoot = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference drChoPVNTV = nodeRoot.child("Applieds").child(FirebaseAuth.getInstance().getUid())
+                                        .child(itemPostJobs.get(position).getDataPostJob().getIdCompany())
+                                        .child(itemPostJobs.get(position).getDataPostJob().getIdJob());
+                DatabaseReference dr = nodeRoot.child("loaiPhongVans").child(FirebaseAuth.getInstance().getUid())
+                        .child(itemPostJobs.get(position).getDataPostJob().getIdCompany())
+                        .child(itemPostJobs.get(position).getDataPostJob().getIdJob());
+
+                drChoPVNTV.removeValue();
+                dr.removeValue();
+
+                itemPostJobs.remove(position);
+                adapter.notifyItemRemoved(position);
+                adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+            }
+        };
+
         recyclerView.setAdapter(adapter);
+
+        final SwipeController swipeController = new SwipeController(swipeControllerActions);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
     }
 }

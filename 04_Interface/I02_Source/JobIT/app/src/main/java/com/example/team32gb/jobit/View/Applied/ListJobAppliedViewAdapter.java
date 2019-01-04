@@ -54,12 +54,15 @@ public class ListJobAppliedViewAdapter extends RecyclerView.Adapter<ListJobAppli
         Log.e("kiemtraid", "onBindViewHolder" + mdata.get(i).getTimeApplied());
         myViewHolder.txtNameJob.setText(mdata.get(i).getDataPostJob().getNameJob());
         myViewHolder.txtNameCompany.setText(mdata.get(i).getNameCompany());
-        myViewHolder.txtTime.setText(Util.getSubTime(mdata.get(i).getTimeApplied()));
         myViewHolder.txtTime.setText(Util.getSubTime(mdata.get(i).getDataPostJob().getTime()));
         myViewHolder.cbFav.setVisibility(View.GONE);
         String minSalary = mdata.get(i).getDataPostJob().getMinSalary();
         String maxSalary = mdata.get(i).getDataPostJob().getMaxSalary();
         myViewHolder.txtSalary.setText("Từ $" + minSalary + " đến $" + maxSalary);
+        if (mdata.get(i).isEliminated()) {
+            myViewHolder.txtNameJob.setTextColor(context.getResources().getColor(R.color.backgroundRed));
+            myViewHolder.txtBiLoai.setVisibility(View.VISIBLE);
+        }
 
         long ONE_MEGABYTE = 1024 * 1024;
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(Config.REF_FOLDER_LOGO).child(mdata.get(i).getIdCompany());
@@ -93,6 +96,7 @@ public class ListJobAppliedViewAdapter extends RecyclerView.Adapter<ListJobAppli
         private TextView txtNameCompany;
         private TextView txtTime;
         private TextView txtSalary;
+        private TextView txtBiLoai;
         private ImageView imageView;
         private CheckBox cbFav;
         // private RelativeLayout item_listjob;
@@ -110,6 +114,7 @@ public class ListJobAppliedViewAdapter extends RecyclerView.Adapter<ListJobAppli
             txtTime = itemView.findViewById(R.id.txtThơiGian);
             txtSalary = itemView.findViewById(R.id.txtSalary);
             cbFav = itemView.findViewById(R.id.cbFav);
+            txtBiLoai = itemView.findViewById(R.id.tvBiLoai);
 
 
             imageView = itemView.findViewById(R.id.imgAvatarCompany);

@@ -48,6 +48,132 @@ exports.thongBaoUngVienApply = functions.database.ref('/choDuyets/{companyId}/{i
         return admin.messaging().sendToDevice(fcm_token.val(), payload);
     });
 }));
+exports.thongBaoMoiPhongVan = functions.database.ref('/choPhongVanNTVs/{idUngVien}/{companyId}/{idJob}')
+    .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
+    const companyId = context.params.companyId;
+    const idJob = context.params.idJob;
+    const idUngVien = context.params.idUngVien;
+    const getNameUngVien = admin.database().ref('/jobseekers/' + idUngVien + '/email').once('value');
+    const getTinTuyenDung = admin.database().ref('/tinTuyenDungs/' + companyId + '/' + idJob + '/nameJob').once('value');
+    const getNameCompany = admin.database().ref('/companys/' + companyId + '/name').once('value');
+    const results = yield Promise.all([getNameUngVien, getTinTuyenDung, getNameCompany]);
+    const nameSnapshot = results[0];
+    const tinTuyenDungSnapshot = results[1];
+    const nameCompanySnapshot = results[2];
+    const nameUngVien = nameSnapshot.val();
+    const tinTuyenDung = tinTuyenDungSnapshot.val();
+    const timeJob = snapshot.child('timeApplied').val();
+    const nameCompany = nameCompanySnapshot.val();
+    console.log('companyId: ' + companyId + 'name: ' + nameCompany + ',jobId: ' + idJob + ",idungvien: " + idUngVien + ",time " + timeJob);
+    console.log('name: ' + nameUngVien + ' tin: ' + tinTuyenDung);
+    let tinTuyenDungStr = tinTuyenDung;
+    let nameCpStr = nameCompany;
+    const payload = {
+        notification: {
+            title: 'Bạn được mời phỏng vấn',
+            body: 'Công ty ' + nameCompany + ' đã mời bạn phỏng vấn công việc ' + tinTuyenDung,
+            badge: '1',
+            sound: 'default'
+        },
+        data: {
+            type: 'thongBaoMoiPhongVan',
+            idCompany: companyId + '',
+            idJob: idJob + '',
+            nameJob: tinTuyenDungStr,
+            timeJob: timeJob + '',
+            nameCompany: nameCpStr + ''
+        }
+    };
+    return admin.database().ref('/fcm_tokens/' + idUngVien + '/token').once('value')
+        .then(fcm_token => {
+        console.log('token available : ' + fcm_token.val());
+        return admin.messaging().sendToDevice(fcm_token.val(), payload);
+    });
+}));
+exports.thongBaoMoiLam = functions.database.ref('/moiLamNTVs/{idUngVien}/{companyId}/{idJob}')
+    .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
+    const companyId = context.params.companyId;
+    const idJob = context.params.idJob;
+    const idUngVien = context.params.idUngVien;
+    const getNameUngVien = admin.database().ref('/jobseekers/' + idUngVien + '/email').once('value');
+    const getTinTuyenDung = admin.database().ref('/tinTuyenDungs/' + companyId + '/' + idJob + '/nameJob').once('value');
+    const getNameCompany = admin.database().ref('/companys/' + companyId + '/name').once('value');
+    const results = yield Promise.all([getNameUngVien, getTinTuyenDung, getNameCompany]);
+    const nameSnapshot = results[0];
+    const tinTuyenDungSnapshot = results[1];
+    const nameCompanySnapshot = results[2];
+    const nameUngVien = nameSnapshot.val();
+    const tinTuyenDung = tinTuyenDungSnapshot.val();
+    const timeJob = snapshot.child('timeApplied').val();
+    const nameCompany = nameCompanySnapshot.val();
+    console.log('companyId: ' + companyId + 'name: ' + nameCompany + ',jobId: ' + idJob + ",idungvien: " + idUngVien + ",time " + timeJob);
+    console.log('name: ' + nameUngVien + ' tin: ' + tinTuyenDung);
+    let tinTuyenDungStr = tinTuyenDung;
+    let nameCpStr = nameCompany;
+    const payload = {
+        notification: {
+            title: 'Bạn được mời làm',
+            body: 'Công ty ' + nameCompany + ' đã mời bạn làm công việc ' + tinTuyenDung,
+            badge: '1',
+            sound: 'default'
+        },
+        data: {
+            type: 'thongBaoMoiLam',
+            idCompany: companyId + '',
+            idJob: idJob + '',
+            nameJob: tinTuyenDungStr,
+            timeJob: timeJob + '',
+            nameCompany: nameCpStr + ''
+        }
+    };
+    return admin.database().ref('/fcm_tokens/' + idUngVien + '/token').once('value')
+        .then(fcm_token => {
+        console.log('token available : ' + fcm_token.val());
+        return admin.messaging().sendToDevice(fcm_token.val(), payload);
+    });
+}));
+exports.loaiPhongVan = functions.database.ref('/loaiPhongVans/{idUngVien}/{companyId}/{idJob}')
+    .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
+    const companyId = context.params.companyId;
+    const idJob = context.params.idJob;
+    const idUngVien = context.params.idUngVien;
+    const getNameUngVien = admin.database().ref('/jobseekers/' + idUngVien + '/email').once('value');
+    const getTinTuyenDung = admin.database().ref('/tinTuyenDungs/' + companyId + '/' + idJob + '/nameJob').once('value');
+    const getNameCompany = admin.database().ref('/companys/' + companyId + '/name').once('value');
+    const results = yield Promise.all([getNameUngVien, getTinTuyenDung, getNameCompany]);
+    const nameSnapshot = results[0];
+    const tinTuyenDungSnapshot = results[1];
+    const nameCompanySnapshot = results[2];
+    const nameUngVien = nameSnapshot.val();
+    const tinTuyenDung = tinTuyenDungSnapshot.val();
+    const timeJob = snapshot.child('timeApplied').val();
+    const nameCompany = nameCompanySnapshot.val();
+    console.log('companyId: ' + companyId + 'name: ' + nameCompany + ',jobId: ' + idJob + ",idungvien: " + idUngVien + ",time " + timeJob);
+    console.log('name: ' + nameUngVien + ' tin: ' + tinTuyenDung);
+    let tinTuyenDungStr = tinTuyenDung;
+    let nameCpStr = nameCompany;
+    const payload = {
+        notification: {
+            title: 'Bạn bị loại khi duyệt CV',
+            body: 'Công ty ' + nameCompany + ' đã loại CV của bạn trong công việc ' + tinTuyenDung,
+            badge: '1',
+            sound: 'default'
+        },
+        data: {
+            type: 'loaiPhongVan',
+            idCompany: companyId + '',
+            idJob: idJob + '',
+            nameJob: tinTuyenDungStr,
+            timeJob: timeJob + '',
+            nameCompany: nameCpStr + ''
+        }
+    };
+    return admin.database().ref('/fcm_tokens/' + idUngVien + '/token').once('value')
+        .then(fcm_token => {
+        console.log('token available : ' + fcm_token.val());
+        return admin.messaging().sendToDevice(fcm_token.val(), payload);
+    });
+}));
 exports.thongBaoPheDuyetNhaTuyenDung = functions.database.ref('/companys/{companyId}/approvalMode')
     .onUpdate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
     const companyId = context.params.companyId;
@@ -153,7 +279,7 @@ exports.thongBaoAdminToCaoRecruiterMoi = functions.database.ref('/reports/recrui
             idReport: idReport + '',
             idUser: idUser + '',
             date: date + '',
-            idAccused: idUser + ''
+            idAccused: idUser + '',
         }
     };
     return admin.database().ref('/fcm_tokens/Xf48VViAaoMAcNvgWvveiDepiq02' + '/token').once('value')
@@ -184,7 +310,6 @@ exports.thongBaoAdminToCaoJobSeekerMoi = functions.database.ref('/reports/jobsee
         data: {
             type: 'thongBaoAdminToCaoJobSeekerMoi',
             idReport: idReport + '',
-            idUser: idUser + '',
             date: date + '',
             idAccused: idUser + ''
         }
