@@ -6,20 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp">
 
-        <Button
-            android:id="@+id/btnAddReview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="Thêm đánh giá" />
-    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -226,12 +213,21 @@
             </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        >
+        android:layout_marginTop="4dp">
+
+        <Button
+            android:id="@+id/btnAddReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Thêm đánh giá" />
+    </androidx.cardview.widget.CardView>
+
         <ListView
             android:id="@+id/lstComment"
             android:layout_width="match_parent"
@@ -239,6 +235,5 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
         </ListView>
-    </androidx.cardview.widget.CardView>
 
 </LinearLayout>
