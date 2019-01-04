@@ -3,11 +3,16 @@ package com.example.team32gb.jobit.View.HomeRecruitmentActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.JobRecruitmentActivity;
 import com.example.team32gb.jobit.ListCandidateAcvitity;
@@ -20,6 +25,14 @@ import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.PostJob.PostJobRecruitmentActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import static com.example.team32gb.jobit.Utility.Config.IS_ACTIVE;
+import static com.example.team32gb.jobit.Utility.Config.REF_RECRUITERS_NODE;
 
 public class HomeRecruitmentActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btnUpLoad,btnPost,btnFileOfRecruit, btnSignOurRecruit, btnChangeUserType, btnProfileAccount;
@@ -59,7 +72,29 @@ public class HomeRecruitmentActivity extends AppCompatActivity implements View.O
         Intent intent = null;
         switch (v.getId()){
             case R.id.btnUploadPost:
-                Util.jumpActivity(this,PostJobRecruitmentActivity.class);
+                //kiểm tra xem account này có bị khóa hay không trước khi đăng tin tuyển dụng mới
+                String idRecruiter = FirebaseAuth.getInstance().getUid();
+                Log.e("kiem tra id", idRecruiter);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(REF_RECRUITERS_NODE).child(idRecruiter).child(IS_ACTIVE);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        boolean isRecruiterActive = (boolean)dataSnapshot.getValue();
+
+                        if (isRecruiterActive){
+                            Util.jumpActivity(getBaseContext(),PostJobRecruitmentActivity.class);
+                        }
+                        else{
+                            Toast.makeText(getBaseContext(), "Tài khoản của bạn đã bị khóa, không thể đăng tin tuyển dụng mới", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 // class đăng tin do nguyên làm cái này, chèn vô activity vô đây
                 // intent = new Intent(this,JobRecruitmentActivity.class);
               //  startActivity(intent);

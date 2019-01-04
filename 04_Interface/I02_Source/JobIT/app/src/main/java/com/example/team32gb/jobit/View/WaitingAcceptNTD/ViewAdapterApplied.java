@@ -19,10 +19,16 @@ import com.example.team32gb.jobit.DataApplied;
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
+
+import static com.example.team32gb.jobit.Utility.Config.IS_ACTIVE;
+import static com.example.team32gb.jobit.Utility.Config.REF_JOBSEEKERS_NODE;
 
 public class ViewAdapterApplied extends RecyclerView.Adapter<ViewAdapterApplied.MyViewHolder>{
 
@@ -50,28 +56,49 @@ public class ViewAdapterApplied extends RecyclerView.Adapter<ViewAdapterApplied.
         myViewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("kiemtraLog",mData.get(i).getIdJobSeeker());
-                DatabaseReference nodeRoot = FirebaseDatabase.getInstance().getReference();
-                String idCompany = mData.get(i).getIdCompany();
-                String idJob = mData.get(i).getIdJob();
-                String idJobSeeker = mData.get(i).getIdJobSeeker();
-                String time = mData.get(i).getDayApplied();
+                //kiểm tra isActive của jobseeker trước khi duyệt
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(REF_JOBSEEKERS_NODE)
+                        .child(mData.get(i).getIdJobSeeker()).child(IS_ACTIVE);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        boolean isJobseekerActive = (boolean)dataSnapshot.getValue();
+                        if (isJobseekerActive){ //Nếu tài khoản của jobseeker còn active
+                            DatabaseReference nodeRoot = FirebaseDatabase.getInstance().getReference();
+                            String idCompany = mData.get(i).getIdCompany();
+                            String idJob = mData.get(i).getIdJob();
+                            String idJobSeeker = mData.get(i).getIdJobSeeker();
+                            String time = mData.get(i).getDayApplied();
 
-                DatabaseReference drDaNop = nodeRoot.child("choDuyets").child(idCompany).child(idJob).child(idJobSeeker);
-                drDaNop.removeValue();
-                DatabaseReference drApplied = nodeRoot.child("Applieds").child(idJobSeeker).child(idCompany).child(idJob);
-                drApplied.removeValue();
+                            DatabaseReference drDaNop = nodeRoot.child("choDuyets").child(idCompany).child(idJob).child(idJobSeeker);
+                            drDaNop.removeValue();
+                            DatabaseReference drApplied = nodeRoot.child("Applieds").child(idJobSeeker).child(idCompany).child(idJob);
+                            drApplied.removeValue();
 
-                DatabaseReference drChoPV = nodeRoot.child("choPhongVanNTDs").child(idCompany).child(idJob).child(idJobSeeker).child("timeApplied");
-                drChoPV.setValue(time);
-                DatabaseReference drChoPVNTV = nodeRoot.child("choPhongVanNTVs").child(idJobSeeker).child(idCompany).child(idJob).child("timeApplied");
-                drChoPVNTV.setValue(time);
+                            DatabaseReference drChoPV = nodeRoot.child("choPhongVanNTDs").child(idCompany).child(idJob).child(idJobSeeker).child("timeApplied");
+                            drChoPV.setValue(time);
+                            DatabaseReference drChoPVNTV = nodeRoot.child("choPhongVanNTVs").child(idJobSeeker).child(idCompany).child(idJob).child("timeApplied");
+                            drChoPVNTV.setValue(time);
 
-                mData.remove(i);
-                notifyItemRemoved(i);
-                notifyItemRangeChanged(i, getItemCount());
+                            mData.remove(i);
+                            notifyItemRemoved(i);
+                            notifyItemRangeChanged(i, getItemCount());
 
-                Toast.makeText(context, "Duyệt thành công", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Duyệt thành công", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(context, "Hồ sơ này đã bị khóa nên bạn không thể duyệt", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                //Log.e("kiemtraLog",mData.get(i).getIdJobSeeker());
+
             }
         });
         myViewHolder.btnWacthCV.setOnClickListener(new View.OnClickListener() {
