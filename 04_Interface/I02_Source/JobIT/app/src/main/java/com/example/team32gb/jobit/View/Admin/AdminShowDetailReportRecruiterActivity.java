@@ -59,6 +59,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private ActionBar acitonBar;
+    private String idReport, date, idAccused;
 
     public AdminShowDetailReportRecruiterActivity() {
     }
@@ -93,7 +94,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("bundle");
-        String idReport, date, idAccused;
+
         if (bundle!=null) {
             idReport = bundle.getString(ID_REPORT_KEY);
             date = bundle.getString(DATE_SEND_KEY);
@@ -103,50 +104,51 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
             //Lấy model report
             refReport = FirebaseDatabase.getInstance().getReference().
                     child(REF_REPORT).child(REF_RECRUITERS_NODE).child(idAccused).child(idReport);
-            refReport.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    model = new ReportJobseekerModel();
-                    model = dataSnapshot.getValue(ReportModel.class);
-                    txtDetailReportDecripton.setText(model.getDecription());
 
-                    DatabaseReference refData = FirebaseDatabase.getInstance().getReference();
-                    /*Lấy tên công ty bị tố cáo*/
-                    refData.child(REF_INFO_COMPANY).child(model.getIdAccused()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            nameAccused = (String) dataSnapshot.getValue();
-                            txtDetailReportNameAccused.setText(nameAccused);
-                        }
+                refReport.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        model = new ReportJobseekerModel();
+                        model = dataSnapshot.getValue(ReportModel.class);
+                        txtDetailReportDecripton.setText(model.getDecription());
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        DatabaseReference refData = FirebaseDatabase.getInstance().getReference();
+                        /*Lấy tên công ty bị tố cáo*/
+                        refData.child(REF_INFO_COMPANY).child(model.getIdAccused()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                nameAccused = (String) dataSnapshot.getValue();
+                                txtDetailReportNameAccused.setText(nameAccused);
+                            }
 
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    /*Lấy tên người tố cáo*/
-                    refData.child(REF_JOBSEEKERS_NODE).child(model.getIdReporter()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            nameReporter = (String) dataSnapshot.getValue();
-                            txtDetailReportReporter.setText(nameReporter);
-                        }
+                            }
+                        });
+                        /*Lấy tên người tố cáo*/
+                        refData.child(REF_JOBSEEKERS_NODE).child(model.getIdReporter()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                nameReporter = (String) dataSnapshot.getValue();
+                                txtDetailReportReporter.setText(nameReporter);
+                            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
-                    txtDetailReportDateSendReport.setText(modelReportWaiting.getDateSendReport());
-                    progressDialog.dismiss();
-                }
+                            }
+                        });
+                        txtDetailReportDateSendReport.setText(modelReportWaiting.getDateSendReport());
+                        progressDialog.dismiss();
+                    }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+                    }
+                });
+
         }
         btnShowDetailHistoryReport.setOnClickListener(this);
         btnShowDetailReportIgnore.setOnClickListener(this);
@@ -170,6 +172,8 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
     }
 
     private void showHistoryReport() {
+            final int[] timesReported = {0}; //số lần bị tố cáo
+
             ViewGroup rootView = (ViewGroup) ((ViewGroup) this
                     .findViewById(android.R.id.content)).getChildAt(0);
             final Dialog dialogShowHistory = new Dialog(this);
@@ -177,6 +181,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
                     .inflate(R.layout.admin_show_history_report, rootView, false);
 
             Button btnCloseHistory = viewHistory.findViewById(R.id.btnCloseHistoryReport);
+            Button btnUnactiveUser = viewHistory.findViewById(R.id.btnUnactiveUser);
             final TextView txtHistoryReport = viewHistory.findViewById(R.id.txtHistoryReport);
             dialogShowHistory.setContentView(viewHistory);
 
@@ -203,6 +208,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
                     }
                     builder.append("\n\nTổng số lần bị tố cáo: "+count+"\n\n");
                     txtHistoryReport.setText(builder.toString());
+                    timesReported[0]= count;
                 }
 
                 @Override
@@ -218,9 +224,66 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
                 }
             });
 
+            btnUnactiveUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogShowHistory.dismiss();
+                    if (timesReported[0] <= 3) {
+                        Toast.makeText(AdminShowDetailReportRecruiterActivity.this, "Số lần bị tố cáo chưa quá 3 lần nên không thể khóa tài khoản", Toast.LENGTH_SHORT).show();
+                    } else {
+                        onUnactiveUserRecruiter();
+                    }
+                }
+            });
+
             dialogShowHistory.show();
     }
 
+    /*Unactive user*/
+    public void onUnactiveUserRecruiter(){
+        /*hiển thị dialog xác nhận*/
+        ViewGroup rootView = (ViewGroup) ((ViewGroup) this
+                .findViewById(android.R.id.content)).getChildAt(0);
+        View view = LayoutInflater.from(this)
+                .inflate(R.layout.admin_dialog_unactive_user, rootView, false);
+        Button btnAcceptUnactiveUser = view.findViewById(R.id.btnAcceptUnactiveUser);
+        Button btnCancelUnactiveUser = view.findViewById(R.id.btnCancelUnactiveUser);
+
+        final Dialog dialog = new Dialog(AdminShowDetailReportRecruiterActivity.this);
+        dialog.setContentView(view);
+        dialog.show();
+
+        btnAcceptUnactiveUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child(REF_JOBSEEKERS_NODE);
+                    /*cho isActive của người bị tố cáo = flase */
+                    refUser.child(idAccused).child("isActive").setValue(false);
+                    Toast.makeText(AdminShowDetailReportRecruiterActivity.this, "Khóa tài khoản thành công", Toast.LENGTH_SHORT).show();
+                    /*Xóa hồ sơ tố cáo của người này*/
+                    presenter.onIgnoreReportJobseeker(modelReportWaiting);
+                } catch (Exception e) {
+                    Toast.makeText(AdminShowDetailReportRecruiterActivity.this, "Khóa tài khoản thất bại", Toast.LENGTH_SHORT).show();
+                }
+                finally {
+                    dialog.dismiss();
+
+                    Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportFragmentTab1.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+
+        btnCancelUnactiveUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
 
     public void setUpDialogSendWarning() {
         final EditText edtMessageFromAdmin;
