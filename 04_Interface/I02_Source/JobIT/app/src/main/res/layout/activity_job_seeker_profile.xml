@@ -97,12 +97,13 @@
     <TextView
         android:id="@+id/tvAuthentication"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="Bạn chưa xác thưc tài khoản"
         android:textColor="@color/colorPrimary"
+        android:visibility="gone"
         android:textSize="18sp" />
 
     <Button
@@ -118,6 +119,7 @@
         android:drawablePadding="10dp"
         android:text="Xác thực tài khoản"
         android:textAllCaps="false"
+        android:visibility="gone"
         android:textSize="17sp" />
 
     <Button

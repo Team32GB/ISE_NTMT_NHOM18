@@ -137,6 +137,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         editor.putString(Config.EMAIL_USER, edtEmail.getText().toString());
         editor.putString(Config.PASSWORD_USER, edtPassword.getText().toString());
         editor.putBoolean(Config.SIGN_UP_WITH_EMAIL, true);
+        editor.putBoolean(Config.IS_LOGGED,true);
         editor.apply();
     }
 

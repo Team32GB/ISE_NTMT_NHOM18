@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.Model.JobSeekerProfile.UserModel;
 import com.example.team32gb.jobit.Presenter.JobSeekerProfile.PresenterInJobSeekerProfile;
@@ -37,6 +39,8 @@ import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
 import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
 import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
@@ -67,6 +71,7 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
     private PresenterInJobSeekerProfile presenterJobSeekerProfile;
     private ProgressBar progressBar;
     private int typeUser;
+    private FirebaseUser fbUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,12 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
         tvEmailProfile = findViewById(R.id.tvEmailProfile);
         edtNameProfile = findViewById(R.id.edtNameProfile);
 
+        fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert fbUser != null;
+        if (!fbUser.isEmailVerified()) {
+            btnAuthenticateAccount.setVisibility(View.VISIBLE);
+            tvAuthentication.setVisibility(View.VISIBLE);
+        }
         btnAuthenticateAccount.setOnClickListener(this);
         btnMyCV.setOnClickListener(this);
         btnChangePassword.setOnClickListener(this);
@@ -118,14 +129,14 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
         if (!sharedPreferences.getBoolean(Config.MAY_GET_LOCAL, false)) {
             switch (typeUser) {
                 case Config.IS_JOB_SEEKER:
-                    presenterJobSeekerProfile.getProfile(Config.REF_JOBSEEKERS_NODE,uid);
+                    presenterJobSeekerProfile.getProfile(Config.REF_JOBSEEKERS_NODE, uid);
                     break;
                 case Config.IS_RECRUITER:
-                    presenterJobSeekerProfile.getProfile(Config.REF_RECRUITERS_NODE,uid);
+                    presenterJobSeekerProfile.getProfile(Config.REF_RECRUITERS_NODE, uid);
                     break;
                 case Config.IS_ADMIN:
-                    Log.e("kiemtraadmin","admin");
-                    presenterJobSeekerProfile.getProfile(Config.REF_ADMINS_NODE,uid);
+                    Log.e("kiemtraadmin", "admin");
+                    presenterJobSeekerProfile.getProfile(Config.REF_ADMINS_NODE, uid);
                     break;
                 default:
                     break;
@@ -201,13 +212,13 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
                 tvNameProfile.setText(name);
                 switch (typeUser) {
                     case Config.IS_JOB_SEEKER:
-                        presenterJobSeekerProfile.saveNameProfile(Config.REF_JOBSEEKERS_NODE,uid,name);
+                        presenterJobSeekerProfile.saveNameProfile(Config.REF_JOBSEEKERS_NODE, uid, name);
                         break;
                     case Config.IS_RECRUITER:
-                        presenterJobSeekerProfile.saveNameProfile(Config.REF_RECRUITERS_NODE,uid,name);
+                        presenterJobSeekerProfile.saveNameProfile(Config.REF_RECRUITERS_NODE, uid, name);
                         break;
                     case Config.IS_ADMIN:
-                        presenterJobSeekerProfile.saveNameProfile(Config.REF_ADMINS_NODE,uid,name);
+                        presenterJobSeekerProfile.saveNameProfile(Config.REF_ADMINS_NODE, uid, name);
                         break;
                     default:
                         break;
@@ -222,6 +233,23 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
                 intent2.setType("image/*");
                 intent2.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent2, "Select Picture"), SELECT_PICTURE);
+                break;
+            case R.id.btnAuthenticateAccount:
+                user.sendEmailVerification()
+                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(ProfileUserActivity.this,
+                                            "Đang gửi tin nhắc xác thực tới " + user.getEmail(),
+                                            Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(ProfileUserActivity.this,
+                                            "Lỗi khi gửi",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                 break;
             default:
                 break;
@@ -259,13 +287,13 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
 
                     switch (typeUser) {
                         case Config.IS_JOB_SEEKER:
-                            presenterJobSeekerProfile.saveImageProfile(Config.REF_JOBSEEKERS_NODE,uid,bitmapThumbnail);
+                            presenterJobSeekerProfile.saveImageProfile(Config.REF_JOBSEEKERS_NODE, uid, bitmapThumbnail);
                             break;
                         case Config.IS_RECRUITER:
-                            presenterJobSeekerProfile.saveImageProfile(Config.REF_RECRUITERS_NODE,uid,bitmapThumbnail);
+                            presenterJobSeekerProfile.saveImageProfile(Config.REF_RECRUITERS_NODE, uid, bitmapThumbnail);
                             break;
                         case Config.IS_ADMIN:
-                            presenterJobSeekerProfile.saveImageProfile(Config.REF_ADMINS_NODE,uid,bitmapThumbnail);
+                            presenterJobSeekerProfile.saveImageProfile(Config.REF_ADMINS_NODE, uid, bitmapThumbnail);
                             break;
                         default:
                             break;
@@ -281,7 +309,7 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
     public void showProfile(UserModel userModel, Bitmap bitmap) {
         Log.e("kiemtrashow", "show");
         if (!userModel.getAvatar().equals("") && bitmap != null) {
-            Log.e("kiemtrashow","a");
+            Log.e("kiemtrashow", "a");
             imgAvatarProfile.setImageBitmap(bitmap);
         }
         tvEmailProfile.setText(userModel.getEmail());
@@ -314,12 +342,12 @@ public class ProfileUserActivity extends AppCompatActivity implements View.OnCli
             case android.R.id.home:
                 onBackPressed();
             case R.id.tbHome:
-                if(typeUser == Config.IS_JOB_SEEKER) {
-                    Util.jumpActivityRemoveStack(this,HomeJobSeekerActivity.class);
-                } else if(typeUser == Config.IS_RECRUITER) {
-                    Util.jumpActivityRemoveStack(this,HomeRecruitmentActivity.class);
+                if (typeUser == Config.IS_JOB_SEEKER) {
+                    Util.jumpActivityRemoveStack(this, HomeJobSeekerActivity.class);
+                } else if (typeUser == Config.IS_RECRUITER) {
+                    Util.jumpActivityRemoveStack(this, HomeRecruitmentActivity.class);
                 } else {
-                    Util.jumpActivityRemoveStack(this,AdminHomeActivity.class);
+                    Util.jumpActivityRemoveStack(this, AdminHomeActivity.class);
                 }
         }
         return super.onOptionsItemSelected(item);

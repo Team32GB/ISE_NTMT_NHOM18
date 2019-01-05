@@ -10,7 +10,7 @@
    <ImageView
        android:id="@+id/imgIt"
        android:layout_width="match_parent"
-       android:layout_height="160dp"
+       android:layout_height="100dp"
        android:layout_marginStart="16dp"
        android:layout_marginEnd="16dp"
        android:layout_marginTop="8dp"
@@ -55,14 +55,19 @@
 
             style="@style/StyleButtonList1"
             android:textAllCaps="false" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnChangeUserTypeRecruiter"
             android:layout_width="match_parent"
             style="@style/StyleButtonList1"
             app:icon="@drawable/ic_change"
-
             android:text="Chuyển đổi chức năng"
+            android:textAllCaps="false" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFeedback"
+            android:layout_width="match_parent"
+            style="@style/StyleButtonList1"
+            app:icon="@drawable/ic_feedback"
+            android:text="Gửi feedback"
             android:textAllCaps="false" />
 
         <com.google.android.material.button.MaterialButton

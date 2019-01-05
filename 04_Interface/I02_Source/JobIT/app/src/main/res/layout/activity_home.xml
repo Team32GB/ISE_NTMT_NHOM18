@@ -180,6 +180,14 @@
                 android:text="Chuyển đổi chức năng" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/StyleButtonList"
+                app:icon="@drawable/ic_feedback"
+                android:text="Gửi Feedback" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSignOut"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

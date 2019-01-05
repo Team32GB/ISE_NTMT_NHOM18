@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,11 +19,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
 import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
+import com.example.team32gb.jobit.View.Feedback.FeedbackModel;
 import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.ProfileUser.ProfileUserActivity;
 import com.example.team32gb.jobit.View.ListJobSearch.ListJobSearchActivity;
@@ -31,7 +36,13 @@ import com.example.team32gb.jobit.View.RecentSearch.RecenteSearchAdapter;
 import com.example.team32gb.jobit.View.RecentSearch.Search;
 import com.example.team32gb.jobit.View.SelectUserType.SelectUserTypeActivity;
 import com.example.team32gb.jobit.View.SignIn.SignInActivity;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +56,8 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
     private Button btnAccount;
     private Button btnSignOut;
     private Button btnChangeUserType;
+    private Button btnFeedback;
+
     private CheckBox cbMore;
     private AppCompatAutoCompleteTextView edtTimKiem, edtDiaDiem;
     private SharedPreferences sharedPreferences;
@@ -71,6 +84,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         btnChangeUserType = findViewById(R.id.btnChangeUserType);
         cbMore = findViewById(R.id.cbMore);
         recyclerView = findViewById(R.id.rcRecent);
+        btnFeedback = findViewById(R.id.btnFeedback);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -79,19 +93,19 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         Paper.init(this);
 
         String countries[] = getResources().getStringArray(R.array.TinhThanh);
-        ArrayAdapter adapterProvince = new ArrayAdapter(this,android.R.layout.simple_list_item_1,countries);
+        ArrayAdapter adapterProvince = new ArrayAdapter(this, android.R.layout.simple_list_item_1, countries);
         edtDiaDiem.setAdapter(adapterProvince);
         edtDiaDiem.setThreshold(1);
 
         String searchs[] = getResources().getStringArray(R.array.searchs);
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,searchs);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, searchs);
         edtTimKiem.setAdapter(adapter);
         edtTimKiem.setThreshold(1);
 
         firebaseAuth = FirebaseAuth.getInstance();
         sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-        if(sharedPreferences.getBoolean(Config.IS_LOGGED,false)) {
-            btnAccount.setText(sharedPreferences.getString(Config.EMAIL_USER,"User name"));
+        if (sharedPreferences.getBoolean(Config.IS_LOGGED, false)) {
+            btnAccount.setText(sharedPreferences.getString(Config.EMAIL_USER, "User name"));
         }
 
         btnSearch.setOnClickListener(this);
@@ -103,6 +117,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         cbMore.setOnCheckedChangeListener(this);
         btnChangeUserType.setOnClickListener(this);
         btnRecent.setOnClickListener(this);
+        btnFeedback.setOnClickListener(this);
 
     }
 
@@ -112,7 +127,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         showRecentSearch();
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(Config.USER_TYPE,Config.IS_JOB_SEEKER);
+        editor.putInt(Config.USER_TYPE, Config.IS_JOB_SEEKER);
         editor.apply();
     }
 
@@ -152,6 +167,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
     protected void onDestroy() {
         super.onDestroy();
     }
+
     private void setUpDialogReport() {
         final View dialogView = LayoutInflater.from(this).inflate(R.layout.lost_internet, null);
         Button btnOk = dialogView.findViewById(R.id.btnOk);
@@ -159,7 +175,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!Util.isConnectingToInternet(HomeJobSeekerActivity.this)) {
+                if (!Util.isConnectingToInternet(HomeJobSeekerActivity.this)) {
                     dialog.show();
                 } else {
                     dialog.dismiss();
@@ -170,12 +186,53 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         dialog.setTitle("Mất kết nối internet");
         dialog.show();
     }
+
+    private void setUpDialogFeedback() {
+        final View dialogView = LayoutInflater.from(this).inflate(R.layout.feedback, null);
+        Button btnOk = dialogView.findViewById(R.id.btnOk);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        final EditText edtContent = dialogView.findViewById(R.id.edtContent);
+        final String uid = FirebaseAuth.getInstance().getUid();
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (uid != null) {
+                    FeedbackModel feedbackModel = new FeedbackModel();
+                    feedbackModel.setTime(Util.getCurrentDay());
+                    feedbackModel.setContent(edtContent.getText().toString());
+                    
+                    DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("feedbacks").child(uid);
+                    String idFeedback = df.push().getKey();
+                    df.child(idFeedback).setValue(feedbackModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(HomeJobSeekerActivity.this, "Gửi thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(HomeJobSeekerActivity.this, "Bạn vui lòng đăng nhập để gửi feedback!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setContentView(dialogView);
+        dialog.setTitle("Mất kết nối internet");
+        dialog.show();
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
             case R.id.btnSearch:
-                if(!Util.isConnectingToInternet(this)) {
+                if (!Util.isConnectingToInternet(this)) {
                     setUpDialogReport();
                 } else {
                     Intent intent = new Intent(this, ListJobSearchActivity.class);
@@ -199,13 +256,13 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
                 startActivity(intentSI);
                 break;
             case R.id.btnRecent:
-                Util.jumpActivity(this,RecentSearch.class);
+                Util.jumpActivity(this, RecentSearch.class);
                 break;
             case R.id.btnCV:
-                if(sharedPreferences.getBoolean(Config.IS_LOGGED, false)) {
-                    Util.jumpActivity(this,CreateCVActivity.class);
+                if (sharedPreferences.getBoolean(Config.IS_LOGGED, false)) {
+                    Util.jumpActivity(this, CreateCVActivity.class);
                 } else {
-                    Util.jumpActivity(this,SignInActivity.class);
+                    Util.jumpActivity(this, SignInActivity.class);
                 }
 
                 break;
@@ -232,6 +289,9 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
                 firebaseAuth.signOut();
                 Util.jumpActivity(this, SelectUserTypeActivity.class);
                 break;
+            case R.id.btnFeedback:
+                setUpDialogFeedback();
+                break;
             default:
                 break;
         }
@@ -240,36 +300,36 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
 
     void saveRecentSearch(Search search) {
         List<Search> searches = Paper.book().read("searches");
-        if(searches == null) {
+        if (searches == null) {
             searches = new ArrayList<>();
         }
-        searches.add(0,search);
-        if(searches.size() > 10) {
+        searches.add(0, search);
+        if (searches.size() > 10) {
             searches.remove(9);
         }
-        Paper.book().write("searches",searches);
-        for (int i = 0;i < searches.size();i++) {
-            Log.e("kiemtraSearch",searches.get(i).getTimkiem());
+        Paper.book().write("searches", searches);
+        for (int i = 0; i < searches.size(); i++) {
+            Log.e("kiemtraSearch", searches.get(i).getTimkiem());
         }
     }
 
     void showRecentSearch() {
         List<Search> searches = Paper.book().read("searches");
-        if(searches == null) return;
-        if(searches.size() > 3) {
+        if (searches == null) return;
+        if (searches.size() > 3) {
             List<Search> temp = new ArrayList<>();
             temp.add(searches.get(0));
             temp.add(searches.get(1));
             temp.add(searches.get(2));
             searches = temp;
         }
-        RecenteSearchAdapter adapter = new RecenteSearchAdapter(this,searches);
+        RecenteSearchAdapter adapter = new RecenteSearchAdapter(this, searches);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked) {
+        if (isChecked) {
             recyclerView.setVisibility(View.VISIBLE);
         } else {
             recyclerView.setVisibility(View.GONE);
