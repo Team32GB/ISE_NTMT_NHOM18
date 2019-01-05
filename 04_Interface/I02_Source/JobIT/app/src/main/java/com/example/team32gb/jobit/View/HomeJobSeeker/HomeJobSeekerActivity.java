@@ -1,5 +1,6 @@
 package com.example.team32gb.jobit.View.HomeJobSeeker;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.paperdb.Paper;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import com.example.team32gb.jobit.R;
 import com.example.team32gb.jobit.Utility.Config;
 import com.example.team32gb.jobit.Utility.Util;
 import com.example.team32gb.jobit.View.CreateCV.CreateCVActivity;
+import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.ProfileUser.ProfileUserActivity;
 import com.example.team32gb.jobit.View.ListJobSearch.ListJobSearchActivity;
 import com.example.team32gb.jobit.View.MyJob.MyJobActivity;
@@ -47,6 +50,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
     private SharedPreferences sharedPreferences;
     private RecyclerView recyclerView;
     FirebaseAuth firebaseAuth;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,7 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_home);
         edtTimKiem = findViewById(R.id.edtTimKiem);
         edtDiaDiem = findViewById(R.id.edtDiaDiem);
+        dialog = new Dialog(this);
 
         btnSearch = findViewById(R.id.btnSearch);
         btnSignIn = findViewById(R.id.btnDangNhap);
@@ -147,27 +152,47 @@ public class HomeJobSeekerActivity extends AppCompatActivity implements View.OnC
     protected void onDestroy() {
         super.onDestroy();
     }
+    private void setUpDialogReport() {
+        final View dialogView = LayoutInflater.from(this).inflate(R.layout.lost_internet, null);
+        Button btnOk = dialogView.findViewById(R.id.btnOk);
 
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Util.isConnectingToInternet(HomeJobSeekerActivity.this)) {
+                    dialog.show();
+                } else {
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.setContentView(dialogView);
+        dialog.setTitle("Mất kết nối internet");
+        dialog.show();
+    }
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
             case R.id.btnSearch:
-                Intent intent = new Intent(this,ListJobSearchActivity.class);
-                Bundle bundle = new Bundle();
-                String timKiem = edtTimKiem.getText().toString();
-                String diaDiem  = edtDiaDiem.getText().toString();
-                if(timKiem.trim().length() <= 0 && diaDiem.trim().length() <= 0) {
-                    edtTimKiem.setError("Hãy nhập thông tin tìm kiếm");
-                    edtDiaDiem.setError("Hãy nhập thông tin tìm kiếm");
+                if(!Util.isConnectingToInternet(this)) {
+                    setUpDialogReport();
                 } else {
-                    bundle.putString("timKiem",edtTimKiem.getText().toString());
-                    bundle.putString("diaDiem",edtDiaDiem.getText().toString());
-                    saveRecentSearch(new Search(timKiem,diaDiem));
-                    intent.putExtra("bundle",bundle);
-                    this.startActivity(intent);
+                    Intent intent = new Intent(this, ListJobSearchActivity.class);
+                    Bundle bundle = new Bundle();
+                    String timKiem = edtTimKiem.getText().toString();
+                    String diaDiem = edtDiaDiem.getText().toString();
+                    if (timKiem.trim().length() <= 0 && diaDiem.trim().length() <= 0) {
+                        edtTimKiem.setError("Hãy nhập thông tin tìm kiếm");
+                        edtDiaDiem.setError("Hãy nhập thông tin tìm kiếm");
+                    } else {
+                        bundle.putString("timKiem", edtTimKiem.getText().toString());
+                        bundle.putString("diaDiem", edtDiaDiem.getText().toString());
+                        saveRecentSearch(new Search(timKiem, diaDiem));
+                        intent.putExtra("bundle", bundle);
+                        this.startActivity(intent);
+                    }
                 }
-
                 break;
             case R.id.btnDangNhap:
                 Intent intentSI = new Intent(this, SignInActivity.class);

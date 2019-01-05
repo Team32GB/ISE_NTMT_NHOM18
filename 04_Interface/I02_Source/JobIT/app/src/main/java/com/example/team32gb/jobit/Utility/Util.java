@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
@@ -85,6 +87,16 @@ public class Util {
 //        editor.putString(Config.NAME_USER,"");
 //        editor.putBoolean(Config.IS_LOGGED,false);
 //        editor.apply();
+    }
+    public static boolean isConnectingToInternet(Context context) {
+
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 
     public static String getSubTime(String timeFormat) {
