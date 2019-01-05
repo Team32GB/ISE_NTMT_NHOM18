@@ -20,6 +20,7 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
     Button btnStatistic;
     Button btnAccount;
     Button btnChangeUserType;
+    Button btnUnactiveUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +32,14 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
         btnStatistic = findViewById(R.id.btnStatistic);
         btnAccount = findViewById(R.id.btnAccount);
         btnChangeUserType = findViewById(R.id.btnChangeUserType);
+        btnUnactiveUser = findViewById(R.id.btnUnactiveUser);
 
         btnReport.setOnClickListener(this);
         btnApproval.setOnClickListener(this);
         btnStatistic.setOnClickListener(this);
         btnAccount.setOnClickListener(this);
         btnChangeUserType.setOnClickListener(this);
+        btnUnactiveUser.setOnClickListener(this);
 
     }
 
@@ -68,6 +71,10 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
             case R.id.btnAccount:
                 Util.jumpActivity(this,ProfileUserActivity.class);
                 break;
+            case R.id.btnUnactiveUser:
+                intent = new Intent();
+                intent.setClass(this, AdminUnactiveUserActivity.class);
+                startActivity(intent);
             default:
                 break;
 

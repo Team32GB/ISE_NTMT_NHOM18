@@ -49,6 +49,7 @@ public class Config {
     public static final String ID_COMPANY_KEY ="idCompany";
 
     public static final String IS_ACTIVE= "isActive";
+    public static final String UN_ACTIVE_USER="unActiveUsers";
 
     public static long MILISECONDOFDAY = 86400000;
 }

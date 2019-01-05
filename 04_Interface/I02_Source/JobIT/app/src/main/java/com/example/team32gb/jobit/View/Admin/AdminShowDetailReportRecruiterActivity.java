@@ -18,13 +18,19 @@ import android.widget.Toast;
 import com.example.team32gb.jobit.Model.Report.ReportJobseekerModel;
 import com.example.team32gb.jobit.Model.Report.ReportModel;
 import com.example.team32gb.jobit.Model.Report.ReportWaitingAdminApprovalModel;
+import com.example.team32gb.jobit.Model.UnActiveUser.UnactiveUserModel;
 import com.example.team32gb.jobit.Presenter.AdminApproval.PresenterAdminApprovalReport;
 import com.example.team32gb.jobit.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -34,10 +40,13 @@ import androidx.appcompat.widget.Toolbar;
 import static com.example.team32gb.jobit.Utility.Config.DATE_SEND_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_ACCUSED_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_REPORT_KEY;
+import static com.example.team32gb.jobit.Utility.Config.IS_JOB_SEEKER;
+import static com.example.team32gb.jobit.Utility.Config.IS_RECRUITER;
 import static com.example.team32gb.jobit.Utility.Config.REF_INFO_COMPANY;
 import static com.example.team32gb.jobit.Utility.Config.REF_JOBSEEKERS_NODE;
 import static com.example.team32gb.jobit.Utility.Config.REF_RECRUITERS_NODE;
 import static com.example.team32gb.jobit.Utility.Config.REF_REPORT;
+import static com.example.team32gb.jobit.Utility.Config.UN_ACTIVE_USER;
 
 public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView txtDetailReportNameAccused;
@@ -263,6 +272,13 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
                     Toast.makeText(AdminShowDetailReportRecruiterActivity.this, "Khóa tài khoản thành công", Toast.LENGTH_SHORT).show();
                     /*Xóa hồ sơ tố cáo của người này*/
                     presenter.onIgnoreReportJobseeker(modelReportWaiting);
+
+                    //thêm dữ liệu vào node unActiveUser
+                    Date date = Calendar.getInstance().getTime();
+                    SimpleDateFormat df = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+                    String dateSendUnactive = df.format(date);
+                    UnactiveUserModel unactiveUser = new UnactiveUserModel(nameAccused, idAccused, dateSendUnactive, IS_RECRUITER);
+                    onUnactiveUser(unactiveUser);
                 } catch (Exception e) {
                     Toast.makeText(AdminShowDetailReportRecruiterActivity.this, "Khóa tài khoản thất bại", Toast.LENGTH_SHORT).show();
                 }
@@ -368,6 +384,15 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
         dialog.show();
     }
 
+    public void onUnactiveUser(UnactiveUserModel model){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(UN_ACTIVE_USER).child(model.getId());
+        ref.setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //thành công
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
