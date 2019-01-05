@@ -41,6 +41,7 @@ import static com.example.team32gb.jobit.Utility.Config.DATE_SEND_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_ACCUSED_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_REPORT_KEY;
 import static com.example.team32gb.jobit.Utility.Config.IS_JOB_SEEKER;
+import static com.example.team32gb.jobit.Utility.Config.REF_COMMENT_IN_RATING;
 import static com.example.team32gb.jobit.Utility.Config.REF_JOBSEEKERS_NODE;
 import static com.example.team32gb.jobit.Utility.Config.REF_RATING;
 import static com.example.team32gb.jobit.Utility.Config.REF_REPORT;
@@ -114,7 +115,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                     //đưa bình luận vi phạm lên
                     String idCommentInvalid = model.getIdCommentInvalid(); //là id công ty
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(REF_RATING)
-                            .child(idCommentInvalid).child(model.getIdAccused());
+                            .child(idCommentInvalid).child(model.getIdAccused()).child(REF_COMMENT_IN_RATING);
 
                     ref.addListenerForSingleValueEvent(new ValueEventListener() {   //lấy nội dung bình luận
                                 @Override
@@ -299,7 +300,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                 finally {
                     dialog.dismiss();
 
-                    Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportFragmentTab1.class);
+                    Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -362,6 +363,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
 
                     Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -398,7 +400,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
 
                 dialog.dismiss();
 
-                Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportFragmentTab1.class);
+                Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportActivity.class);
                 startActivity(intent);
                 finish();
             }

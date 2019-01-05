@@ -230,7 +230,7 @@ public class AdminReportFragmentTab2 extends Fragment {
                     edtMessageFromAdmin.setError("Bạn phải nhập nhắc nhở cảnh báo");
                 }
                 else{
-                    presenter.onSendWarningReportToJobseeker(model,message);
+                    presenter.onSendWarningReportToRecruiter(model,message);
                     dialog.dismiss();
                 }
             }

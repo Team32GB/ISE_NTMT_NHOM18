@@ -187,9 +187,12 @@ exports.thongBaoPheDuyetNhaTuyenDung = functions.database.ref('/companys/{compan
         payload = {
             notification: {
                 title: 'Phê duyệt hồ sơ thành công',
-                body: 'Hồ sơ của bạn trên Job IT đã được thành công',
+                body: 'Hồ sơ của bạn trên Job IT đã được duyệt thành công',
                 badge: '1',
                 sound: 'default'
+            },
+            data: {
+                type: 'thongBaoPheDuyetNhaTuyenDung'
             }
         };
     }
@@ -200,6 +203,9 @@ exports.thongBaoPheDuyetNhaTuyenDung = functions.database.ref('/companys/{compan
                 body: 'Hồ sơ trên Job IT của bạn không được duyệt. Bạn hãy kiểm tra lại.',
                 badge: '1',
                 sound: 'default'
+            },
+            data: {
+                type: 'thongBaoPheDuyetNhaTuyenDung'
             }
         };
     }
@@ -224,6 +230,9 @@ exports.thongBaoCanhCaoJobseeker = functions.database.ref('/reports/jobseekers/{
             body: adminComment,
             badge: '1',
             sound: 'default'
+        },
+        data: {
+            type: 'thongBaoCanhCaoJobseeker'
         }
     };
     return admin.database().ref('/fcm_tokens/' + idUser + '/token').once('value')
@@ -247,6 +256,9 @@ exports.thongBaoCanhCaoRecruiter = functions.database.ref('/reports/recruiters/{
             body: adminComment,
             badge: '1',
             sound: 'default'
+        },
+        data: {
+            type: 'thongBaoCanhCaoRecruiter'
         }
     };
     return admin.database().ref('/fcm_tokens/' + idUser + '/token').once('value')
@@ -360,6 +372,9 @@ exports.thongBaoBiKhoaTaiKhoan = functions.database.ref('/unActiveUsers/{idUser}
             body: 'Bạn bị tố cáo nhiều lần nên tài khoản đã bị admin khóa',
             badge: '1',
             sound: 'default'
+        },
+        data: {
+            type: 'thongBaoBiKhoaTaiKhoan'
         }
     };
     return admin.database().ref('/fcm_tokens/' + idUser + '/token').once('value')

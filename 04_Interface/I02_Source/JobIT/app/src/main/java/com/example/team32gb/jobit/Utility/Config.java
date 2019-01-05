@@ -17,7 +17,7 @@ public class Config {
     public static final String REF_REPORT ="reports";
     public static final String REF_RATING = "rating";
     public static final String REF_LIST_RATING = "listRating";
-
+    public static final String REF_COMMENT_IN_RATING = "comment";
     //Dữ liệu offline
     public static final String SHARED_PREFERENCES_NAME = "team32gb";
     public static final String USER_TYPE = "USER_TYPE";

@@ -285,7 +285,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
                 finally {
                     dialog.dismiss();
 
-                    Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportFragmentTab1.class);
+                    Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -338,6 +338,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
 
                     Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -375,7 +376,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
 
                 dialog.dismiss();
 
-                Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportFragmentTab1.class);
+                Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportActivity.class);
                 startActivity(intent);
                 finish();
             }
