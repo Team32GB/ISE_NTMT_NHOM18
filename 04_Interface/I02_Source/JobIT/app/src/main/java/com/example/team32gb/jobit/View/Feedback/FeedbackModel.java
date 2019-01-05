@@ -19,4 +19,9 @@ public class FeedbackModel {
 
     String time;
     String content;
+
+    public FeedbackModel() {
+    }
+
+
 }

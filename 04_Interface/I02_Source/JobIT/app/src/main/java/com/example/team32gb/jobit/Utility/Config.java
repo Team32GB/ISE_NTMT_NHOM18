@@ -50,6 +50,7 @@ public class Config {
 
     public static final String IS_ACTIVE= "isActive";
     public static final String UN_ACTIVE_USER="unActiveUsers";
+    public static final String FEED_BACKS_NODE = "feedbacks";
 
     public static long MILISECONDOFDAY = 86400000;
 }
