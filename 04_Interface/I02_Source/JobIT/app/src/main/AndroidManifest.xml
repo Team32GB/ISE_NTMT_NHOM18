@@ -83,7 +83,8 @@
         <activity android:name=".View.Admin.AdminApprovalActivity" />
         <activity android:name=".View.Admin.AdminReportActivity" />
         <activity android:name=".View.RecentSearch.RecentSearch" />
-        <activity android:name=".View.Admin.AdminUnactiveUserActivity"></activity>
+        <activity android:name=".View.Admin.AdminUnactiveUserActivity" />
+        <activity android:name=".View.Admin.AdminFeedback"></activity>
     </application>
 
 </manifest>

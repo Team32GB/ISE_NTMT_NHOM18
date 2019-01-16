@@ -20,7 +20,10 @@ import com.example.team32gb.jobit.View.Admin.AdminShowDetailReportJobseekerActiv
 import com.example.team32gb.jobit.View.Admin.AdminShowDetailReportRecruiterActivity;
 import com.example.team32gb.jobit.View.Admin.ShowDetailCompanyApprovalActivity;
 import com.example.team32gb.jobit.View.Applied.AppliedActivity;
+import com.example.team32gb.jobit.View.HomeJobSeeker.HomeJobSeekerActivity;
+import com.example.team32gb.jobit.View.HomeRecruitmentActivity.HomeRecruitmentActivity;
 import com.example.team32gb.jobit.View.InviteJob.InviteJobActivity;
+import com.example.team32gb.jobit.View.SignIn.SignInActivity;
 import com.example.team32gb.jobit.View.WaitingForInterview.InterviewActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -82,6 +85,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 bundle.putString("timeJob", timeJob);
                 bundle.putString("nameCompany",nameCompany);
             }
+            else{
+                //do nothing
+            }
 
 
             Log.e("kiemtraFCM", type + " : " + title + " : " + body);
@@ -133,8 +139,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent = new Intent(this, AppliedActivity.class);
             //intent.putExtra("bundle", bundle);
         }
+        else if(type.equals("thongBaoPheDuyetNhaTuyenDung")){
+            intent = new Intent(this, HomeRecruitmentActivity.class);
+        }
+        else if(type.equals("thongBaoCanhCaoJobseeker")){
+            intent = new Intent(this, HomeJobSeekerActivity.class);
+        }
+        else if(type.equals("thongBaoCanhCaoRecruiter")){
+            intent = new Intent(this, HomeRecruitmentActivity.class);
+        }
+        else if(type.equals("thongBaoBiKhoaTaiKhoan")){
+            intent = new Intent(this, SignInActivity.class);
+        }
         else {
-            intent = new Intent(this, TestDuyet.class);
+            intent = new Intent(this, SignInActivity.class);
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);

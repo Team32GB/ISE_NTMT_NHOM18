@@ -10,11 +10,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2.5"
+        android:layout_weight="2"
         android:layout_margin="20dp"
         android:text="Admin"
         android:gravity="center"
-        android:textSize="36sp"
+        android:textSize="30sp"
         android:textColor="#fff"
         android:background="@color/colorPrimary"
         android:drawableBottom="@drawable/ic_admin_home2"
@@ -32,7 +32,7 @@
         android:text="Tài khoản"
         android:background="@drawable/custom_button_admin"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="2dp"
         android:paddingHorizontal="50dp"
         app:icon="@drawable/ic_account_admin"/>
 
@@ -44,7 +44,7 @@
         android:text="Tố cáo"
         android:background="@drawable/custom_button_admin"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="2dp"
         android:paddingHorizontal="50dp"
         app:icon="@drawable/ic_report_admin"/>
 
@@ -56,7 +56,7 @@
         android:text="Phê duyệt"
         android:background="@drawable/custom_button_admin"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="2dp"
         android:paddingHorizontal="50dp"
         app:icon="@drawable/ic_approval_admin"/>
 
@@ -68,7 +68,7 @@
         android:text="Thống kê"
         android:background="@drawable/custom_button_admin"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="2dp"
         android:paddingHorizontal="50dp"
         app:icon="@drawable/ic_statistic_admin"/>
 
@@ -80,9 +80,21 @@
             android:text="User bị khóa tài khoản"
             android:background="@drawable/custom_button_admin"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="2dp"
             android:paddingHorizontal="50dp"
-            app:icon="@drawable/ic_statistic_admin"/>
+            app:icon="@drawable/admin_unactive"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFeedbackToAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Feedback"
+            android:background="@drawable/custom_button_admin"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="2dp"
+            android:paddingHorizontal="50dp"
+            app:icon="@drawable/admin_feedback"/>
 
 
         <com.google.android.material.button.MaterialButton
@@ -95,7 +107,7 @@
         android:textStyle="bold"
         android:background="@drawable/custom_button_admin"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="2dp"
         android:paddingHorizontal="50dp"
         android:drawableStart="@drawable/ic_statistic_admin"/>
 

@@ -41,7 +41,9 @@ import static com.example.team32gb.jobit.Utility.Config.DATE_SEND_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_ACCUSED_KEY;
 import static com.example.team32gb.jobit.Utility.Config.ID_REPORT_KEY;
 import static com.example.team32gb.jobit.Utility.Config.IS_JOB_SEEKER;
+import static com.example.team32gb.jobit.Utility.Config.REF_COMMENT_IN_RATING;
 import static com.example.team32gb.jobit.Utility.Config.REF_JOBSEEKERS_NODE;
+import static com.example.team32gb.jobit.Utility.Config.REF_RATING;
 import static com.example.team32gb.jobit.Utility.Config.REF_REPORT;
 import static com.example.team32gb.jobit.Utility.Config.UN_ACTIVE_USER;
 
@@ -61,6 +63,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
     private ReportJobseekerModel model;
     private ReportWaitingAdminApprovalModel modelReportWaiting;
     private PresenterAdminApprovalReport presenter;
+
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private ActionBar acitonBar;
@@ -109,8 +112,24 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                     model = new ReportJobseekerModel();
                     model = dataSnapshot.getValue(ReportJobseekerModel.class); //Lấy model report
 
-                    //todo: đưa bình luận vi phạm lên???
-                    txtDetailReportCommentInvalid.setText(model.getIdCommentInvalid());
+                    //đưa bình luận vi phạm lên
+                    String idCommentInvalid = model.getIdCommentInvalid(); //là id công ty
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(REF_RATING)
+                            .child(idCommentInvalid).child(model.getIdAccused()).child(REF_COMMENT_IN_RATING);
+
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {   //lấy nội dung bình luận
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String commentInvalid = (String)dataSnapshot.getValue();
+                                    txtDetailReportCommentInvalid.setText(commentInvalid);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
                     txtDetailReportDecripton.setText(model.getDecription());
 
                     DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child(REF_JOBSEEKERS_NODE);
@@ -281,7 +300,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
                 finally {
                     dialog.dismiss();
 
-                    Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportFragmentTab1.class);
+                    Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -344,6 +363,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
 
                     Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -380,7 +400,7 @@ public class AdminShowDetailReportJobseekerActivity extends AppCompatActivity im
 
                 dialog.dismiss();
 
-                Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportFragmentTab1.class);
+                Intent intent = new Intent(AdminShowDetailReportJobseekerActivity.this, AdminReportActivity.class);
                 startActivity(intent);
                 finish();
             }

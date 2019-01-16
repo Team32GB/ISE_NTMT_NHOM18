@@ -3,6 +3,7 @@ package com.example.team32gb.jobit.View.Admin;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,6 +22,7 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
     Button btnAccount;
     Button btnChangeUserType;
     Button btnUnactiveUser;
+    Button btnFeedbackToAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
         btnAccount = findViewById(R.id.btnAccount);
         btnChangeUserType = findViewById(R.id.btnChangeUserType);
         btnUnactiveUser = findViewById(R.id.btnUnactiveUser);
+        btnFeedbackToAdmin = findViewById(R.id.btnFeedbackToAdmin);
 
         btnReport.setOnClickListener(this);
         btnApproval.setOnClickListener(this);
@@ -40,6 +43,7 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
         btnAccount.setOnClickListener(this);
         btnChangeUserType.setOnClickListener(this);
         btnUnactiveUser.setOnClickListener(this);
+        btnFeedbackToAdmin.setOnClickListener(this);
 
     }
 
@@ -74,7 +78,15 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
             case R.id.btnUnactiveUser:
                 intent = new Intent();
                 intent.setClass(this, AdminUnactiveUserActivity.class);
+                Log.e("kiemtra nhay acti", "Nhay qua unactive user");
                 startActivity(intent);
+                break;
+            case R.id.btnFeedbackToAdmin:
+                intent = new Intent();
+                intent.setClass(this, AdminFeedback.class);
+                Log.e("kiemtra nhay acti", "Nhay qua feedbacks user");
+                startActivity(intent);
+                break;
             default:
                 break;
 

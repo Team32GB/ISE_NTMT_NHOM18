@@ -5,28 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".View.Admin.AdminUnactiveUserActivity">
+    tools:context=".View.Admin.AdminFeedback">
 
     <com.google.android.material.appbar.AppBarLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tbUnactiveUser"
+            android:id="@+id/tbFeedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:subtitle="Chi tiết"
             app:subtitleTextColor="@color/white"
-            app:title="User bị khóa tài khoản"
-            app:titleTextColor="@color/white">
-        </androidx.appcompat.widget.Toolbar>
+            app:title="Feedbacks"
+            app:titleTextColor="@color/white"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewUnactiveUser"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:orientation="vertical"/>
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvListFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

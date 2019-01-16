@@ -266,7 +266,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
             @Override
             public void onClick(View v) {
                 try {
-                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child(REF_JOBSEEKERS_NODE);
+                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child(REF_RECRUITERS_NODE);
                     /*cho isActive của người bị tố cáo = flase */
                     refUser.child(idAccused).child("isActive").setValue(false);
                     Toast.makeText(AdminShowDetailReportRecruiterActivity.this, "Khóa tài khoản thành công", Toast.LENGTH_SHORT).show();
@@ -285,7 +285,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
                 finally {
                     dialog.dismiss();
 
-                    Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportFragmentTab1.class);
+                    Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -338,6 +338,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
 
                     Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -375,7 +376,7 @@ public class AdminShowDetailReportRecruiterActivity extends AppCompatActivity im
 
                 dialog.dismiss();
 
-                Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportFragmentTab1.class);
+                Intent intent = new Intent(AdminShowDetailReportRecruiterActivity.this, AdminReportActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:background="#fff">
+
+        <TextView
+            android:id="@+id/txtContentFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Content"
+            android:textColor="#111"
+            android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/txtDateSendFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:background="#f1eeee"
+        android:textColor="#e6b122"
+        android:text="Date"/>
+    </LinearLayout>
+</LinearLayout>
