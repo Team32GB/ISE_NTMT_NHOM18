@@ -10,7 +10,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const algoliasearch = require("algoliasearch");
 admin.initializeApp();
+const algolia = algoliasearch('OYGFHT3AFC', '5d4c2ba1711e8b20d3754bc717222edc');
+const index = algolia.initIndex('tinTuyenDungs');
+exports.syncAlgoliaWithFirebase = functions.database.ref('/tinTuyenDungs/{idCompany}/{idTin}')
+    .onWrite((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
+    const idCompany = context.params.idCompany;
+    const idTin = context.params.idTin;
+    const timeJob = snapshot.after.child('nameJob').val();
+    console.log('companyId: ' + idCompany + ' ' + idTin + ' ' + timeJob);
+    const records = [];
+    // get the key and data from the snapshot
+    const childKey = idTin;
+    const childData = snapshot.after.val();
+    // We set the Algolia objectID as the Firebase .key
+    childData.objectID = childKey;
+    // Add object for indexing
+    records.push(childData);
+    // Add or update new objects
+    return index
+        .saveObjects(records)
+        .then(() => {
+        console.log('Contacts imported into Algolia');
+    });
+    // .catch(error => {
+    //  console.error('Error when importing contact into Algolia', error)
+    //  process.exit(1)
+    // })
+}));
 exports.thongBaoUngVienApply = functions.database.ref('/choDuyets/{companyId}/{idJob}/{idUngVien}')
     .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
     const companyId = context.params.companyId;

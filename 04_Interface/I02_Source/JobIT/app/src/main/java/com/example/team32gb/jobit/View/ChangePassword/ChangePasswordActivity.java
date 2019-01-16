@@ -73,9 +73,15 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                onBackPressed();
+                ChangePasswordActivity.this.finish();
             case R.id.tbHome:
+                if (typeUser == Config.IS_JOB_SEEKER) {
                     Util.jumpActivityRemoveStack(this, HomeJobSeekerActivity.class);
+                } else if (typeUser == Config.IS_RECRUITER) {
+                    Util.jumpActivityRemoveStack(this, HomeRecruitmentActivity.class);
+                } else {
+                    Util.jumpActivityRemoveStack(this, AdminHomeActivity.class);
+                }
         }
         return super.onOptionsItemSelected(item);
     }

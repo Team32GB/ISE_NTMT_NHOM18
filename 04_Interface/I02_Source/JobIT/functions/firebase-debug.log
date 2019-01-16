@@ -1,0 +1,13 @@
+[debug] [2019-01-14T02:06:22.552Z] ----------------------------------------------------------------------
+[debug] [2019-01-14T02:06:22.554Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ntran\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js functions:config:set algolia.index=tinTuyenDungs
+[debug] [2019-01-14T02:06:22.555Z] CLI Version:   6.2.2
+[debug] [2019-01-14T02:06:22.555Z] Platform:      win32
+[debug] [2019-01-14T02:06:22.555Z] Node Version:  v8.12.0
+[debug] [2019-01-14T02:06:22.555Z] Time:          Mon Jan 14 2019 09:06:22 GMT+0700 (SE Asia Standard Time)
+[debug] [2019-01-14T02:06:22.555Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-01-14T02:06:22.569Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-01-14T02:06:22.570Z] > authorizing via signed-in user
+[debug] [2019-01-14T02:06:22.570Z] [iam] checking project jobit-e18f7 for permissions ["firebase.projects.get","runtimeconfig.configs.create","runtimeconfig.configs.delete","runtimeconfig.configs.get","runtimeconfig.configs.list","runtimeconfig.configs.update","runtimeconfig.variables.create","runtimeconfig.variables.delete","runtimeconfig.variables.get","runtimeconfig.variables.list","runtimeconfig.variables.update"]
+[debug] [2019-01-14T02:06:22.573Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/jobit-e18f7:testIamPermissions  
+

@@ -1,16 +1,47 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
+import * as algoliasearch from 'algoliasearch'
+import * as algoliafunctions from 'algolia-firebase-functions'
+
 admin.initializeApp()
+const algolia = algoliasearch('OYGFHT3AFC','5d4c2ba1711e8b20d3754bc717222edc')
+const index = algolia.initIndex('tinTuyenDungs')
+ 
+ exports.syncAlgoliaWithFirebase = functions.database.ref('/tinTuyenDungs/{idCompany}/{idTin}')
+ .onWrite(async(snapshot, context) => {
+        const idCompany = context.params.idCompany
+        const idTin = context.params.idTin
+        const timeJob = snapshot.after.child('nameJob').val()
+        console.log('companyId: ' + idCompany + ' ' + idTin + ' '  + timeJob)
+
+        const records = [];
+
+        // get the key and data from the snapshot
+        const childKey = idTin
+        const childData = snapshot.after.val()
+        // We set the Algolia objectID as the Firebase .key
+        childData.objectID = childKey
+        // Add object for indexing
+        records.push(childData)
+        // Add or update new objects
+        return index
+        .saveObjects(records)
+        .then(() => {
+          console.log('Contacts imported into Algolia')
+        })
+        // .catch(error => {
+        //  console.error('Error when importing contact into Algolia', error)
+        //  process.exit(1)
+        // })
+    })
 
 exports.thongBaoUngVienApply = functions.database.ref('/choDuyets/{companyId}/{idJob}/{idUngVien}')
     .onCreate(async(snapshot, context) => {
      
-       
         const companyId = context.params.companyId
         const idJob = context.params.idJob
 
         const idUngVien = context.params.idUngVien
-        
     
         const getNameUngVien = admin.database().ref('/jobseekers/' + idUngVien + '/email').once('value')
         const getTinTuyenDung = admin.database().ref('/tinTuyenDungs/' + companyId + '/' + idJob + '/nameJob').once('value')

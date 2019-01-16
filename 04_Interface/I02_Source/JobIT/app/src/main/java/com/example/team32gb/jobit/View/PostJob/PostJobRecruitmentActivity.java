@@ -67,7 +67,7 @@ public class PostJobRecruitmentActivity extends AppCompatActivity implements Vie
         setContentView(R.layout.activity_post_job_recruitment);
 
         myToolBar = findViewById(R.id.tbJobRecruitment);
-        myToolBar.setTitle("Danh sách việc làm ");
+        myToolBar.setTitle("Đăng tin tuyển dụng");
         setSupportActionBar(myToolBar);
 
         edtJobTitle=findViewById(R.id.edtJobTittle);
@@ -298,10 +298,10 @@ public class PostJobRecruitmentActivity extends AppCompatActivity implements Vie
                 if(valid)
                 {
                     Save();
-                    Toast.makeText(getApplication(), "Đăng kí thành công",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplication(), "Đăng tin thành công",Toast.LENGTH_LONG).show();
                 }
                 else
-                    Toast.makeText(getApplication(), "Đăng kí không thành thành công",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplication(), "Đăng tin không thành thành công",Toast.LENGTH_LONG).show();
 
             }
         });

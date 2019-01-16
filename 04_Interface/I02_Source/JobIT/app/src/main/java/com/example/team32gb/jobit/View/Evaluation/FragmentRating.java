@@ -166,7 +166,7 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
                     tvstart4.setText(String.valueOf(ratingCompany4));
                     //Log.e("kiemtraRating",ratingAverage + ":" + size + ":" + ratingTotalAverage);
 
-                    CustomCommentAdapter customCommentAdapter = new CustomCommentAdapter(context, ratingModels,mCommunication);
+                    CustomCommentAdapter customCommentAdapter = new CustomCommentAdapter(context, ratingModels, mCommunication);
                     lstComment.setAdapter(customCommentAdapter);
                     setListViewHeightBasedOnChildren(lstComment);
                 }
@@ -281,20 +281,28 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ratingModel.setComment(edtComment.getText().toString());
-                ratingModel.setRatingAverage(Double.parseDouble(Float.toString(ratingAverage)));
-                ratingModel.setRating1(Double.parseDouble(Float.toString(rating1)));
-                ratingModel.setRating2(Double.parseDouble(Float.toString(rating2)));
-                ratingModel.setRating3(Double.parseDouble(Float.toString(rating3)));
-                ratingModel.setRating4(Double.parseDouble(Float.toString(rating4)));
-                ratingModel.setDateTime(Util.getCurrentDay());
-                ratingModel.setTitle(edtTitle.getText().toString());
-                nodeRating.child(uid).setValue(ratingModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(context, "Đánh giá thành công", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                if (ratingAverage == 0.f) {
+                    Toast.makeText(context, "Vui lòng chọn sao đánh giá", Toast.LENGTH_SHORT).show();
+                } else if (edtTitle.getText().toString().equals("")) {
+                    edtTitle.setError("Vui lòng nhập nội dung");
+                } else if (edtComment.getText().toString().equals("")) {
+                    edtComment.setError("Vui lòng nhập nội dung");
+                } else {
+                    ratingModel.setComment(edtComment.getText().toString());
+                    ratingModel.setRatingAverage(Double.parseDouble(Float.toString(ratingAverage)));
+                    ratingModel.setRating1(Double.parseDouble(Float.toString(rating1)));
+                    ratingModel.setRating2(Double.parseDouble(Float.toString(rating2)));
+                    ratingModel.setRating3(Double.parseDouble(Float.toString(rating3)));
+                    ratingModel.setRating4(Double.parseDouble(Float.toString(rating4)));
+                    ratingModel.setDateTime(Util.getCurrentDay());
+                    ratingModel.setTitle(edtTitle.getText().toString());
+                    nodeRating.child(uid).setValue(ratingModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(context, "Đánh giá thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 
@@ -375,6 +383,7 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
         dialog.setTitle("Đánh giá nhà tuyển dụng");
         dialog.show();
     }
+
     private void setUpDialogReport(final int position) {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.custom_dialog_tocao, null);
         final EditText edtComment = dialogView.findViewById(R.id.edtComment);
@@ -412,7 +421,7 @@ public class FragmentRating extends Fragment implements View.OnClickListener {
                         Toast.makeText(context, "Tố cáo thành công", Toast.LENGTH_SHORT).show();
                     }
                 });
-
+                dialog.dismiss();
             }
         });
 

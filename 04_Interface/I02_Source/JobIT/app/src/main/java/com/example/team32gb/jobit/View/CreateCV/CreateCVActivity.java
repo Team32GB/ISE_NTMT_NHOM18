@@ -306,7 +306,11 @@ public class CreateCVActivity extends AppCompatActivity implements View.OnClickL
                 //todo
                 break;
             case R.id.btnSaveCV:
-                saveCV();
+                if(!edtDateOfBird.getText().toString().matches("([0-9]{1,2}\\/){1,2}[0-9]{4}hg")) {
+                    edtDateOfBird.setError("Vui lòng nhập đúng định dạng");
+                } else {
+                    saveCV();
+                }
                 break;
             default:
                 break;
