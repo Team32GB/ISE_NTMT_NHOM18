@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.example.team32gb.jobit.Lib.GreenRobotEventBus;
+import com.example.team32gb.jobit.Presenter.CreateCV.CreateCVInterface;
 import com.example.team32gb.jobit.Utility.Config;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +40,24 @@ public class ModelCreateCV {
                 if(dataSnapshot.getValue() != null) {
                     cvEmployeeModel = dataSnapshot.getValue(CVEmployeeModel.class);
                     eventBus.post(cvEmployeeModel);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void getCVFromUid (String uid, final CreateCVInterface createCVInterface){
+        DatabaseReference dfCV = dfCVsNode.child(uid);
+        dfCV.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.e(TAG,dataSnapshot + "");
+                if(dataSnapshot.getValue() != null) {
+                    cvEmployeeModel = dataSnapshot.getValue(CVEmployeeModel.class);
+                    createCVInterface.getCVModel(cvEmployeeModel);
                 }
             }
             @Override

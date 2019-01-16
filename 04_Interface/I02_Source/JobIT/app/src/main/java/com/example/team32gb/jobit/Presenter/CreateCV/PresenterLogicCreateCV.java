@@ -22,7 +22,18 @@ public class PresenterLogicCreateCV implements PresenterInCreateCV{
     }
     @Override
     public void getCVFromUid(String uid) {
-        modelCreateCV.getCVFromUid(uid);
+        CreateCVInterface createCVInterface = new CreateCVInterface() {
+            @Override
+            public void getCVModel(CVEmployeeModel model) {
+                showCV(model);
+            }
+        };
+        modelCreateCV.getCVFromUid(uid,createCVInterface);
+    }
+
+    @Override
+    public void getCVFromUid(String uid, CreateCVInterface createCVInterface) {
+
     }
 
     @Override

@@ -9,7 +9,8 @@ public interface PresenterInCreateCV {
     void onCreate();
     void onDestroy();
 
-    public void saveCV(String uid, CVEmployeeModel cvEmployeeModel, List<ProjectInCVModel> projectInCVModels);
-    public void showCV (CVEmployeeModel cvEmployeeModel);
-    public void getCVFromUid(String uid);
+     void saveCV(String uid, CVEmployeeModel cvEmployeeModel, List<ProjectInCVModel> projectInCVModels);
+     void showCV (CVEmployeeModel cvEmployeeModel);
+     void getCVFromUid(String uid);
+     void getCVFromUid(String uid,CreateCVInterface createCVInterface);
 }
